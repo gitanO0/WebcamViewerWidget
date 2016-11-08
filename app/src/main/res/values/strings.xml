@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">WebcamViewerWidget</string>
+    <string name="linklist">Linklist</string>
+    <string name="add_link">Add link</string>
+    <string name="name">Name</string>
+    <string name="link">Link</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="failed_to_add_link">Failed to add link!</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="delete_link_sure">Delete link?</string>
+    <string name="failed_to_delete_link">Failed to delete link!</string>
+    <string name="switch_image">Switch</string>
+    <string name="reload">Reload</string>
+</resources>

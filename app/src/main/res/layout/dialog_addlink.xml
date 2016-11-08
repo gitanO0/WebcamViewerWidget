@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_addlink_et_name"
+        android:hint="@string/name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_addlink_et_link"
+        android:hint="@string/link"
+        android:layout_below="@+id/dialog_addlink_et_name"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:id="@+id/dialog_addlink_btn_cancel"
+        android:layout_below="@+id/dialog_addlink_et_link"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        android:id="@+id/dialog_addlink_btn_add"
+        android:layout_below="@+id/dialog_addlink_et_link"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/dialog_addlink_btn_cancel" />
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">WebcamViewerWidget</string>
+    <string name="linklist">Linkliste</string>
+    <string name="add_link">Link hinzufügen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="add">Hinzufügen</string>
+    <string name="failed_to_add_link">Beim Hinzufügen des Links ist ein Fehler unterlaufen!</string>
+    <string name="no">Nein</string>
+    <string name="yes">Ja</string>
+    <string name="delete_link_sure">Link entfernen?</string>
+    <string name="failed_to_delete_link">Beim Entfernen des Links ist ein Fehler unterlaufen!</string>
+    <string name="switch_image">Wechseln</string>
+    <string name="reload">Neu laden</string>
+</resources>
