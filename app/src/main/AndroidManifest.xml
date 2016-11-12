@@ -28,6 +28,8 @@
         </receiver>
 
         <activity android:name=".ViewImageActivity" />
+        <activity android:name=".ImportActivity" />
+        <activity android:name=".ExportActivity" />
 
         <service
             android:name=".services.WidgetUpdateService"

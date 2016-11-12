@@ -11,4 +11,11 @@
     <string name="failed_to_delete_link">Beim Entfernen des Links ist ein Fehler unterlaufen!</string>
     <string name="switch_image">Wechseln</string>
     <string name="reload">Neu laden</string>
+    <string name="export_links">Exportieren</string>
+    <string name="import_links">Importieren</string>
+    <string name="select_links_to_export">Wähle die Links aus, die exportiert werden sollen</string>
+    <string name="copied_to_clipboard">In Zwischenablage kopiert!</string>
+    <string name="paste_exported_data">Füge exportierte Daten ein:</string>
+    <string name="import_failed">Import fehlgeschlagen</string>
+    <string name="import_completed">Erfolgreich importiert</string>
 </resources>

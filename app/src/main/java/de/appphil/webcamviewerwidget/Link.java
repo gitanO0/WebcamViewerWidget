@@ -15,6 +15,11 @@ public class Link implements Serializable {
     private String link;
 
     /***
+     * Only needed for ExportActivity.
+     */
+    private transient boolean checked = false;
+
+    /***
      * Constructor for Link.
      * @param name Name of the link.
      * @param link Link.
@@ -38,5 +43,21 @@ public class Link implements Serializable {
      */
     public String getLink() {
         return link;
+    }
+
+    /***
+     * Changes the checked state.
+     * @param checked
+     */
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    /***
+     * Returns if the link is checked.
+     * @return
+     */
+    public boolean isChecked() {
+        return checked;
     }
 }

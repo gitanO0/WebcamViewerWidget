@@ -13,4 +13,11 @@
     <string name="failed_to_delete_link">Failed to delete link!</string>
     <string name="switch_image">Switch</string>
     <string name="reload">Reload</string>
+    <string name="export_links">Export</string>
+    <string name="import_links">Import</string>
+    <string name="select_links_to_export">Select links to export</string>
+    <string name="copied_to_clipboard">Copied to clipboard!</string>
+    <string name="paste_exported_data">Paste exported data:</string>
+    <string name="import_failed">Import failed</string>
+    <string name="import_completed">Import completed</string>
 </resources>

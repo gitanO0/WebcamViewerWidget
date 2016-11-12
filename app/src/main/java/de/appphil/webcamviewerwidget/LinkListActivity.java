@@ -3,6 +3,7 @@ package de.appphil.webcamviewerwidget;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,6 +26,16 @@ public class LinkListActivity extends Activity {
     private Button btnAddLink;
 
     /***
+     * Button to export links.
+     */
+    private Button btnExport;
+
+    /***
+     * Button to import links.
+     */
+    private Button btnImport;
+
+    /***
      * ListView to shows the linklist.
      */
     private ListView lv;
@@ -44,6 +55,22 @@ public class LinkListActivity extends Activity {
             @Override
             public void onClick(View view) {
                 showAddLinkDialog();
+            }
+        });
+
+        btnExport = (Button) findViewById(R.id.linklist_btn_export);
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startExportActivity();
+            }
+        });
+
+        btnImport = (Button) findViewById(R.id.linklist_btn_import);
+        btnImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startImportActivity();
             }
         });
 
@@ -74,6 +101,24 @@ public class LinkListActivity extends Activity {
         }
 
         updateListView();
+    }
+
+    /***
+     * Gets called when the user clicks on the export button.
+     * Starts the ExportActivity.
+     */
+    private void startExportActivity() {
+        Intent intent = new Intent(this, ExportActivity.class);
+        startActivity(intent);
+    }
+
+    /***
+     * Gets called when the user clicks on the import button.
+     * Starts the ImportActivity.
+     */
+    private void startImportActivity() {
+        Intent intent = new Intent(this, ImportActivity.class);
+        startActivity(intent);
     }
 
     /***
@@ -181,9 +226,16 @@ public class LinkListActivity extends Activity {
                 dialog.dismiss();
             }
         });
-
-
         dialog.show();
+    }
+
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        // restart to update listview
+        finish();
+        startActivity(getIntent());
     }
 
 }

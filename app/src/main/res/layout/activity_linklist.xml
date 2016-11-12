@@ -16,5 +16,22 @@
         android:layout_height="wrap_content"
         android:id="@+id/linklist_lv"
         android:layout_below="@+id/linklist_btn_add_link"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/linklist_btn_export" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/export_links"
+        android:id="@+id/linklist_btn_export"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/import_links"
+        android:id="@+id/linklist_btn_import"
+        android:layout_alignBottom="@+id/linklist_btn_export"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
