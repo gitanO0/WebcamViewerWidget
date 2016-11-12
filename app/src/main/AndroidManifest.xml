@@ -29,6 +29,13 @@
 
         <activity android:name=".ViewImageActivity" />
 
+        <service
+            android:name=".services.WidgetUpdateService"
+            android:exported="false"/>
+        <service
+            android:name=".services.WidgetSwitchLinkService"
+            android:exported="false"/>
+
      </application>
 
 </manifest>
