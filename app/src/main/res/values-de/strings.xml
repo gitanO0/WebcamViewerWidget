@@ -18,4 +18,5 @@
     <string name="paste_exported_data">Füge exportierte Daten ein:</string>
     <string name="import_failed">Import fehlgeschlagen</string>
     <string name="import_completed">Erfolgreich importiert</string>
+    <string name="name_cant_contain">Name darf nicht enthalten: </string>
 </resources>

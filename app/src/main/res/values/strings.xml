@@ -20,4 +20,5 @@
     <string name="paste_exported_data">Paste exported data:</string>
     <string name="import_failed">Import failed</string>
     <string name="import_completed">Import completed</string>
+    <string name="name_cant_contain">Name can\'t contain: </string>
 </resources>

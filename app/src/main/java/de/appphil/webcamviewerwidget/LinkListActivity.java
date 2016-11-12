@@ -207,6 +207,13 @@ public class LinkListActivity extends Activity {
                 String name = etName.getText().toString();
                 String link = etLink.getText().toString();
 
+                // name can't contain ":"
+                if(name.contains(":")) {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.name_cant_contain) + " :", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                    return;
+                }
+
                 // add new Link objects to linklist
                 linklist.add(new Link(name, link));
 
