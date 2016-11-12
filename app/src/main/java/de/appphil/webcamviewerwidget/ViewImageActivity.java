@@ -6,11 +6,11 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import java.io.File;
+
+import de.appphil.webcamviewerwidget.utils.Vars;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class ViewImageActivity extends Activity {
-
-    private static final String FILENAME = "image.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class ViewImageActivity extends Activity {
         Picasso picasso = Picasso.with(this);
         picasso.setLoggingEnabled(true);
         // load image from internal storage
-        picasso.load(new File(this.getFilesDir() + "/" + FILENAME)).into(iv);
+        picasso.load(new File(this.getFilesDir() + "/" + Vars.IMAGE_FILENAME)).into(iv);
 
         // allow to zoom
         PhotoViewAttacher attacher = new PhotoViewAttacher(iv);

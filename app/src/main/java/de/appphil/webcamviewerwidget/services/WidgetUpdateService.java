@@ -17,10 +17,9 @@ import de.appphil.webcamviewerwidget.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.WVWidgetProvider;
 import de.appphil.webcamviewerwidget.utils.CurrentLink;
+import de.appphil.webcamviewerwidget.utils.Vars;
 
 public class WidgetUpdateService extends IntentService {
-
-    private static final String FILENAME = "image.png";
 
     public WidgetUpdateService() {
         super("WidgetUpdateService");
@@ -48,7 +47,7 @@ public class WidgetUpdateService extends IntentService {
         if(bitmap == null) return;
 
         try {
-            File file = new File(getFilesDir() + "/" + FILENAME);
+            File file = new File(getFilesDir() + "/" + Vars.IMAGE_FILENAME);
             FileOutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
 
