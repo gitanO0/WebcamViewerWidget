@@ -19,11 +19,12 @@ public class ViewImageActivity extends Activity {
 
         ImageView iv = (ImageView) findViewById(R.id.viewimage_iv);
 
-        // load image into iv
+        // load image from internal storage into iv
         Picasso picasso = Picasso.with(this);
         picasso.setLoggingEnabled(true);
-        // load image from internal storage
-        picasso.load(new File(this.getFilesDir() + "/" + Vars.IMAGE_FILENAME)).into(iv);
+        File file = new File(this.getFilesDir() + "/" + Vars.IMAGE_FILENAME);
+        picasso.invalidate(file);
+        picasso.load(file).into(iv);
 
         // allow to zoom
         PhotoViewAttacher attacher = new PhotoViewAttacher(iv);
