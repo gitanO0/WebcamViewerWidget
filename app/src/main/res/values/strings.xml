@@ -21,4 +21,8 @@
     <string name="import_failed">Import failed</string>
     <string name="import_completed">Import completed</string>
     <string name="name_cant_contain">Name can\'t contain: </string>
+    <string name="settings">Settings</string>
+    <string name="auto_update_widget">Auto update widget</string>
+    <string name="update_interval_in_min">Update interval (in minutes):</string>
+    <string name="only_update_with_wifi">Only update with wifi</string>
 </resources>

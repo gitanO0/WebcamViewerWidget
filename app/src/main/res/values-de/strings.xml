@@ -19,4 +19,8 @@
     <string name="import_failed">Import fehlgeschlagen</string>
     <string name="import_completed">Erfolgreich importiert</string>
     <string name="name_cant_contain">Name darf nicht enthalten: </string>
+    <string name="settings">Einstellungen</string>
+    <string name="auto_update_widget">Widget automatisch aktualisieren</string>
+    <string name="update_interval_in_min">Update Intervall (in Minuten):</string>
+    <string name="only_update_with_wifi">Nur über WLAN aktualisieren</string>
 </resources>

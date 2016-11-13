@@ -13,6 +13,11 @@ public class MainActivity extends Activity {
      */
     private Button btnLinklist;
 
+    /***
+     * Button to start SettingsActivity.
+     */
+    private Button btnSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +29,16 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 // start LinkListActivity
                 Intent intent = new Intent(getApplicationContext(), LinkListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnSettings = (Button) findViewById(R.id.menu_btn_settings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // start SettingsActivity
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
             }
         });

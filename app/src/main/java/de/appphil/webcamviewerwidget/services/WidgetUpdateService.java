@@ -3,8 +3,12 @@ package de.appphil.webcamviewerwidget.services;
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
@@ -28,6 +32,45 @@ public class WidgetUpdateService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         System.out.println("Running WidgetUpdateService now!");
+
+        // check if there's an internet connection
+        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        if(isConnected) {
+            // check if update was sent by an alarm
+            if(intent.hasExtra("sentByAlarm")) {
+                // check if widget should only be updated with wifi connection
+                SharedPreferences sharedPref = this.getSharedPreferences(Vars.PREFS, Context.MODE_PRIVATE);
+                boolean onlyUpdateWithWifi = sharedPref.getBoolean(Vars.ONLY_UPDATE_WITH_WIFI, true);
+                if(onlyUpdateWithWifi) {
+                    // check if wifi is connected
+                    boolean isWifi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+                    if(isWifi) {
+                        // update
+                    } else {
+                        // don't update
+                        System.out.println("WidgetUpdateService: Not updated widget because it should only update automatically with a wifi connection and there's none now.");
+                        return;
+                    }
+                }
+            } else {
+                System.out.println("WidgetUpdateService: intent has't got sentByAlarm intent.");
+                // update sent by user clicking on "reload" button so also update without wifi
+            }
+            boolean isWifi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+            if(isWifi) {
+                // can update
+            } else {
+
+            }
+        } else {
+            System.out.println("WidgetUpdateService: Not updated widget because there's no internet connection available.");
+            return;
+        }
+
         // get the current link
         String currentLink = getCurrentLink();
         if(currentLink.isEmpty()) return;

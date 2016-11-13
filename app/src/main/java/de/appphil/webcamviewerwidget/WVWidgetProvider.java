@@ -1,20 +1,55 @@
 package de.appphil.webcamviewerwidget;
 
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.widget.RemoteViews;
+
+import java.util.Calendar;
+
 import de.appphil.webcamviewerwidget.services.WidgetSwitchLinkService;
 import de.appphil.webcamviewerwidget.services.WidgetUpdateService;
+import de.appphil.webcamviewerwidget.utils.PendingIntents;
+import de.appphil.webcamviewerwidget.utils.Vars;
 
 public class WVWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
         System.out.println("Widget enabled!");
+
+        // check if auto update widget is enabled
+        SharedPreferences sharedPref = context.getSharedPreferences(Vars.PREFS, Context.MODE_PRIVATE);
+        if(sharedPref.getBoolean(Vars.AUTO_UPDATE_WIDGET, false)) {
+            // widget should be updated automatically
+            // get interval
+            int interval = sharedPref.getInt(Vars.AUTO_UPDATE_INTERVAL, 1);
+            setAlarm(context, interval);
+        }
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+        // cancel alarm
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmMgr.cancel(PendingIntents.getUpdateWidgetPendingIntent(context, true));
+    }
+
+    private void setAlarm(Context context, int intervalInMin) {
+        System.out.println("WVWidgetProvider sets alarm now.");
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * intervalInMin, PendingIntents.getUpdateWidgetPendingIntent(context, true));
     }
 
     public void onUpdate(final Context context, AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
@@ -31,7 +66,7 @@ public class WVWidgetProvider extends AppWidgetProvider {
             Reload Button
              */
             Intent intentReload = new Intent(context, WidgetUpdateService.class);
-            PendingIntent piReload = PendingIntent.getService(context, 0, intentReload, 0);
+            PendingIntent piReload = PendingIntent.getService(context, 0, intentReload, PendingIntent.FLAG_CANCEL_CURRENT);
             views.setOnClickPendingIntent(R.id.widget_wv_btn_reload, piReload);
 
             /*
