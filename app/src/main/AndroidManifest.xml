@@ -32,6 +32,7 @@
         <activity android:name=".ImportActivity" />
         <activity android:name=".ExportActivity" />
         <activity android:name=".SettingsActivity" />
+        <activity android:name=".InfoActivity" />
 
         <service
             android:name=".services.WidgetUpdateService"

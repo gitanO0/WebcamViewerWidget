@@ -18,6 +18,11 @@ public class MainActivity extends Activity {
      */
     private Button btnSettings;
 
+    /***
+     * Button to start InfoActivity.
+     */
+    private Button btnInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +44,16 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 // start SettingsActivity
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnInfo = (Button) findViewById(R.id.menu_btn_info);
+        btnInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // start InfoActivity
+                Intent intent = new Intent(getApplicationContext(), InfoActivity.class);
                 startActivity(intent);
             }
         });

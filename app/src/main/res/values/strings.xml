@@ -25,4 +25,7 @@
     <string name="auto_update_widget">Auto update widget</string>
     <string name="update_interval_in_min">Update interval (in minutes):</string>
     <string name="only_update_with_wifi">Only update with wifi</string>
+    <string name="info_title">Information:</string>
+    <string name="info_text">WebcamViewerWidget uses the following libraries:</string>
+    <string name="information">Information</string>
 </resources>

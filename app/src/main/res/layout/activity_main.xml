@@ -14,21 +14,25 @@
         android:layout_height="wrap_content"
         android:text="@string/linklist"
         android:id="@+id/menu_btn_linklist"
-        android:layout_above="@+id/space"
-        android:layout_centerHorizontal="true"/>
+        android:layout_above="@+id/menu_btn_settings"
+        android:layout_alignStart="@+id/menu_btn_settings"
+        android:layout_alignEnd="@+id/menu_btn_settings" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/settings"
         android:id="@+id/menu_btn_settings"
-        android:layout_below="@+id/space"
-        android:layout_centerHorizontal="true"/>
-
-    <Space
-        android:layout_width="20px"
-        android:layout_height="20px"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/space" />
+        android:layout_alignStart="@+id/menu_btn_info"
+        android:layout_alignEnd="@+id/menu_btn_info" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/information"
+        android:id="@+id/menu_btn_info"
+        android:layout_below="@+id/menu_btn_settings"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
