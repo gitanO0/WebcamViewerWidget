@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/edit_link"
+        android:id="@+id/dialog_editlink_tv_title"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_editlink_et_name"
+        android:layout_below="@+id/dialog_editlink_tv_title"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_editlink_et_link"
+        android:layout_below="@+id/dialog_editlink_et_name"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:id="@+id/dialog_editlink_btn_cancel"
+        android:layout_below="@+id/dialog_editlink_et_link"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/dialog_editlink_btn_save"
+        android:layout_below="@+id/dialog_editlink_et_link"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/dialog_editlink_btn_cancel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/or"
+        android:id="@+id/dialog_editlink_tv_or"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/dialog_editlink_btn_save"
+        android:layout_toStartOf="@+id/dialog_editlink_tv_title"
+        android:layout_alignBottom="@+id/dialog_editlink_btn_delete" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete"
+        android:id="@+id/dialog_editlink_btn_delete"
+        android:layout_below="@+id/dialog_editlink_btn_save"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

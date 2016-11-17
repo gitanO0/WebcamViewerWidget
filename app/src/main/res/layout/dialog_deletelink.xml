@@ -27,4 +27,5 @@
         android:id="@+id/dialog_deletelink_tv_title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

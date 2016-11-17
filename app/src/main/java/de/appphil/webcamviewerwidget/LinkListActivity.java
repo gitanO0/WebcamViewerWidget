@@ -78,7 +78,7 @@ public class LinkListActivity extends Activity {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int itemPosition, long l) {
-                showDeleteLinkDialog(itemPosition);
+                showEditLinkDialog(itemPosition);
                 return true;
             }
         });
@@ -135,6 +135,67 @@ public class LinkListActivity extends Activity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, names);
         lv.setAdapter(adapter);
+    }
+
+    /***
+     * Shows the dialog to edit or delete the selected link.
+     * @param itemPosition Position of the selected link.
+     */
+    private void showEditLinkDialog(final int itemPosition) {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_editlink);
+
+        Link link = linklist.get(itemPosition);
+
+        final EditText etName = (EditText) dialog.findViewById(R.id.dialog_editlink_et_name);
+        etName.setText(link.getName());
+        final EditText etLink = (EditText) dialog.findViewById(R.id.dialog_editlink_et_link);
+        etLink.setText(link.getLink());
+
+        Button btnCancel = (Button) dialog.findViewById(R.id.dialog_editlink_btn_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // dismiss the dialog
+                dialog.dismiss();
+            }
+        });
+
+        Button btnSave = (Button) dialog.findViewById(R.id.dialog_editlink_btn_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // get name and link
+                String name = etName.getText().toString();
+                String link = etLink.getText().toString();
+                // update linklist
+                linklist.set(itemPosition, new Link(name, link));
+                // save linklist
+                try {
+                    LinkListIO.saveLinklist(getApplicationContext(), linklist);
+                    // update listview
+                    updateListView();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.edit_failed), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+                // dismiss the dialog
+                dialog.dismiss();
+            }
+        });
+
+        Button btnDelete = (Button) dialog.findViewById(R.id.dialog_editlink_btn_delete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // dismiss dialog
+                dialog.dismiss();
+                // show dialog and ask if the user really wants to delete the link
+                showDeleteLinkDialog(itemPosition);
+            }
+        });
+
+        dialog.show();
     }
 
     /***

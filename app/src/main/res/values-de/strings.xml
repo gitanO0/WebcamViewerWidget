@@ -26,4 +26,9 @@
     <string name="info_title">Informationen:</string>
     <string name="info_text">WebcamViewerWidget nutzt folgende Bibliotheken:</string>
     <string name="information">Informationen</string>
+    <string name="edit_link">Link bearbeiten:</string>
+    <string name="save">Speichern</string>
+    <string name="or">Oder:</string>
+    <string name="delete">Entfernen</string>
+    <string name="edit_failed">Fehler beim Bearbeiten des Links!</string>
 </resources>
