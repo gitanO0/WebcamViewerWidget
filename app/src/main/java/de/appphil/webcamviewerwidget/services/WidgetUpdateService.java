@@ -33,6 +33,8 @@ public class WidgetUpdateService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         System.out.println("Running WidgetUpdateService now!");
 
+        String info = null;
+
         // check if there's an internet connection
         ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -84,6 +86,8 @@ public class WidgetUpdateService extends IntentService {
         try {
             bitmap = picasso.load(currentLink).get();
         } catch (IOException e) {
+            info = getResources().getString(R.string.download_failed);
+            updateWidgetInfoText(info);
             e.printStackTrace();
         }
 
@@ -97,7 +101,13 @@ public class WidgetUpdateService extends IntentService {
             out.flush();
             out.close();
         } catch(Exception e){
+            info = getResources().getString(R.string.loading_failed);
+            updateWidgetInfoText(info);
             e.printStackTrace();
+        }
+
+        if(info == null) {
+            info = getCurrentLinkName() + ":";
         }
 
         // update widget
@@ -105,8 +115,21 @@ public class WidgetUpdateService extends IntentService {
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_wv);
         ComponentName thisWidget = new ComponentName(getApplication(), WVWidgetProvider.class);
         remoteViews.setImageViewBitmap(R.id.widget_wv_iv, bitmap);
+        remoteViews.setTextViewText(R.id.widget_wv_tv_info, info);
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 
+    }
+
+    /***
+     * Changes the info text in the widget.
+     * @param text
+     */
+    private void updateWidgetInfoText(String text) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_wv);
+        ComponentName thisWidget = new ComponentName(getApplication(), WVWidgetProvider.class);
+        remoteViews.setTextViewText(R.id.widget_wv_tv_info, text);
+        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
     }
 
     /***
@@ -117,6 +140,20 @@ public class WidgetUpdateService extends IntentService {
      */
     private String getCurrentLink() {
         // get current link name
+        String currentLinkName = getCurrentLinkName();
+
+        if(currentLinkName.isEmpty()) return currentLinkName;
+
+        // get the link by the name and return it
+        return LinkListIO.getLinkByName(getApplicationContext(), currentLinkName);
+    }
+
+    /***
+     * Tries to get the current link name.
+     * If there's no current link saved it returns an empty string.
+     * @return
+     */
+    private String getCurrentLinkName() {
         String currentLinkName = "";
         try {
             currentLinkName = CurrentLink.getCurrentLinkName(getApplicationContext());
@@ -125,10 +162,6 @@ public class WidgetUpdateService extends IntentService {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        if(currentLinkName.isEmpty()) return currentLinkName;
-
-        // get the link by the name and return it
-        return LinkListIO.getLinkByName(getApplicationContext(), currentLinkName);
+        return currentLinkName;
     }
 }

@@ -31,4 +31,7 @@
     <string name="or">Oder:</string>
     <string name="delete">Entfernen</string>
     <string name="edit_failed">Fehler beim Bearbeiten des Links!</string>
+    <string name="download_failed">Download fehlgeschlagen</string>
+    <string name="loading_failed">Laden fehlgeschlagen</string>
+    <string name="download_succeeded">Download erfolgreich</string>
 </resources>

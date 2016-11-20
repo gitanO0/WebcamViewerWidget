@@ -33,4 +33,7 @@
     <string name="or">Or:</string>
     <string name="delete">Delete</string>
     <string name="edit_failed">Failed to edit link!</string>
+    <string name="download_failed">Download failed</string>
+    <string name="loading_failed">Loading failed</string>
+    <string name="download_succeeded">Download succeeded</string>
 </resources>
