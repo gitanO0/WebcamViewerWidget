@@ -4,15 +4,18 @@ package de.appphil.webcamviewerwidget;
 import android.content.Context;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import de.appphil.webcamviewerwidget.utils.XMLManager;
+
 public class LinkListIO {
 
-    private static final String linklistFilename = "linklist.list";
+    private static final String linklistFilename = "linklist.xml";
 
     /***
      * Saves the linklist to file.
@@ -21,11 +24,17 @@ public class LinkListIO {
      * @throws IOException
      */
     public static void saveLinklist(Context context, ArrayList<Link> linklist) throws IOException {
-        FileOutputStream fileOutputStream = context.openFileOutput(linklistFilename, Context.MODE_PRIVATE);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+        // linklist to xml string
+        String xmlString = "<linklist>";
+        for(Link link : linklist) {
+            xmlString = xmlString + XMLManager.linkToXML(link);
+        }
+        xmlString = xmlString + "</linklist>";
 
-        objectOutputStream.writeObject(linklist);
-        objectOutputStream.close();
+        // save string to file
+        FileOutputStream outputStream = context.openFileOutput(linklistFilename, Context.MODE_PRIVATE);
+        outputStream.write(xmlString.getBytes());
+        outputStream.close();
     }
 
     /***
@@ -41,12 +50,14 @@ public class LinkListIO {
         // return empty linklist when there's no file
         if(!linklistFileExists(context)) return linklist;
 
-        FileInputStream fileInputStream  = context.openFileInput(linklistFilename);
-        ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+        String xmlString = "";
+        FileInputStream inputStream = context.openFileInput(linklistFilename);
+        byte[] input = new byte[inputStream.available()];
+        while (inputStream.read(input) != -1) {
+        }
+        xmlString = xmlString + new String(input);
 
-        linklist = (ArrayList<Link>) objectInputStream.readObject();
-        objectInputStream.close();
-        return linklist;
+        return XMLManager.getLinklistFromXML(xmlString);
     }
 
 

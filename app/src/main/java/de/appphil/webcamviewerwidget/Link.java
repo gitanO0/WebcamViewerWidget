@@ -1,8 +1,6 @@
 package de.appphil.webcamviewerwidget;
 
-import java.io.Serializable;
-
-public class Link implements Serializable {
+public class Link {
 
     /***
      * Name of the link.
@@ -17,7 +15,7 @@ public class Link implements Serializable {
     /***
      * Only needed for ExportActivity.
      */
-    private transient boolean checked = false;
+    private boolean checked = false;
 
     /***
      * Constructor for Link.
