@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -152,6 +153,9 @@ public class LinkListActivity extends Activity {
         final EditText etLink = (EditText) dialog.findViewById(R.id.dialog_editlink_et_link);
         etLink.setText(link.getLink());
 
+        final CheckBox cbActivated = (CheckBox) dialog.findViewById(R.id.dialog_editlink_cb_activated);
+        cbActivated.setChecked(link.isActivated());
+
         Button btnCancel = (Button) dialog.findViewById(R.id.dialog_editlink_btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,8 +172,10 @@ public class LinkListActivity extends Activity {
                 // get name and link
                 String name = etName.getText().toString();
                 String link = etLink.getText().toString();
+                // check if link should be activated
+                boolean activated = cbActivated.isChecked();
                 // update linklist
-                linklist.set(itemPosition, new Link(name, link));
+                linklist.set(itemPosition, new Link(name, link, activated));
                 // save linklist
                 try {
                     LinkListIO.saveLinklist(getApplicationContext(), linklist);
@@ -276,7 +282,7 @@ public class LinkListActivity extends Activity {
                 }
 
                 // add new Link objects to linklist
-                linklist.add(new Link(name, link));
+                linklist.add(new Link(name, link, true));
 
                 // try to save linklist
                 try {

@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="@string/cancel"
         android:id="@+id/dialog_editlink_btn_cancel"
-        android:layout_below="@+id/dialog_editlink_et_link"
+        android:layout_below="@+id/dialog_editlink_cb_activated"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:text="@string/save"
         android:id="@+id/dialog_editlink_btn_save"
-        android:layout_below="@+id/dialog_editlink_et_link"
+        android:layout_alignTop="@+id/dialog_editlink_btn_cancel"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/dialog_editlink_btn_cancel" />
 
@@ -62,5 +62,13 @@
         android:text="@string/delete"
         android:id="@+id/dialog_editlink_btn_delete"
         android:layout_below="@+id/dialog_editlink_btn_save"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activated"
+        android:id="@+id/dialog_editlink_cb_activated"
+        android:layout_below="@+id/dialog_editlink_et_link"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

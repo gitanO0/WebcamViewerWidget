@@ -33,32 +33,18 @@ public class WidgetSwitchLinkService extends IntentService{
         // get the position of the link in the list
         int currentLinkPosition = getPositionOfLinkName(linklist, currentLinkName);
 
-        // get the position where the next link can be found in list
-        int nextLinkPosition = getPositionOfNextLink(linklist, currentLinkPosition);
-
-        // set new current link
-        CurrentLink.saveCurrentLinkName(getApplicationContext(), linklist.get(nextLinkPosition).getName());
+        if(containsActivatedLink(linklist)) {
+            String nextLinkName = getNextLinkName(linklist, currentLinkPosition);
+            // set new current link
+            CurrentLink.saveCurrentLinkName(getApplicationContext(), nextLinkName);
+        } else {
+            // there's no activated link so the current link can't be switched
+            return;
+        }
 
         // update the widget image (done by WidgetUpdateService)
         Intent updateService = new Intent(this, WidgetUpdateService.class);
         startService(updateService);
-    }
-
-    /***
-     * Gets the position of the next link (the link that will should be shown after switch).
-     * @param linklist ArrayList with Link objects.
-     * @param currentLinkPosition Position of the current link in the list.
-     * @return Position where the next link can be found in list.
-     */
-    private int getPositionOfNextLink(ArrayList<Link> linklist, int currentLinkPosition) {
-        // get the position of the new name
-        int positionNew = 0;
-        if(currentLinkPosition == linklist.size()-1) {
-            positionNew = 0;
-        } else {
-            positionNew = currentLinkPosition + 1;
-        }
-        return positionNew;
     }
 
     /***
@@ -104,11 +90,46 @@ public class WidgetSwitchLinkService extends IntentService{
         ArrayList<Link> linklist = null;
         try {
             linklist = LinkListIO.loadLinklist(getApplicationContext());
+            return linklist;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return linklist;
+    }
+
+    /***
+     * Returns the name of the next activated link.
+     * @param linklist
+     * @param currentLinkPosition
+     * @return
+     */
+    private String getNextLinkName(ArrayList<Link> linklist, int currentLinkPosition) {
+        int positionNew = 0;
+        if(currentLinkPosition == linklist.size()-1) {
+            positionNew = 0;
+        } else {
+            positionNew = currentLinkPosition + 1;
+        }
+        // check if that link is deactivated
+        if(!linklist.get(positionNew).isActivated()) {
+            return getNextLinkName(linklist, positionNew);
+        } else {
+            // link is activated
+            return linklist.get(positionNew).getName();
+        }
+    }
+
+    /***
+     * Checks if the given list contains an activated link.
+     * @param linklist
+     * @return
+     */
+    private boolean containsActivatedLink(ArrayList<Link> linklist) {
+        for(Link link : linklist) {
+            if(link.isActivated()) return true;
+        }
+        return false;
     }
 }

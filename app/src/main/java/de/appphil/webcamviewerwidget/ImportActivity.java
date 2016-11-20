@@ -59,7 +59,7 @@ public class ImportActivity extends Activity {
             for (String part : parts) {
                 part = part.replace("{", "");
                 String[] content = part.split(";");
-                importedLinks.add(new Link(content[0], content[1]));
+                importedLinks.add(new Link(content[0], content[1], true));
                 System.out.println("Name: " + content[0] + " Link: " + content[1]);
             }
         } catch(ArrayIndexOutOfBoundsException e) {
