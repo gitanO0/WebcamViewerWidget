@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 import java.io.IOException;
 
-import de.appphil.webcamviewerwidget.LinkListIO;
+import de.appphil.webcamviewerwidget.link.LinkListIO;
 
 public class CurrentLink {
 

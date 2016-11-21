@@ -1,4 +1,4 @@
-package de.appphil.webcamviewerwidget.services;
+package de.appphil.webcamviewerwidget.widgets.services;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
@@ -17,9 +17,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import de.appphil.webcamviewerwidget.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
-import de.appphil.webcamviewerwidget.WVWidgetProvider;
+import de.appphil.webcamviewerwidget.link.LinkListIO;
+import de.appphil.webcamviewerwidget.widgets.WVWidgetProvider;
 import de.appphil.webcamviewerwidget.utils.CurrentLink;
 import de.appphil.webcamviewerwidget.utils.Vars;
 

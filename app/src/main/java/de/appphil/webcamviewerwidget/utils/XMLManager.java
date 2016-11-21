@@ -10,7 +10,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 
-import de.appphil.webcamviewerwidget.Link;
+import de.appphil.webcamviewerwidget.link.Link;
 
 public class XMLManager {
 

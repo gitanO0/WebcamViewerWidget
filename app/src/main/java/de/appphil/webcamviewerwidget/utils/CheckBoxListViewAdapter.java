@@ -10,7 +10,7 @@ import android.widget.CheckBox;
 
 import java.util.ArrayList;
 
-import de.appphil.webcamviewerwidget.Link;
+import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.R;
 
 public class CheckBoxListViewAdapter extends BaseAdapter {

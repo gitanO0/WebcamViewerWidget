@@ -1,10 +1,8 @@
-package de.appphil.webcamviewerwidget;
+package de.appphil.webcamviewerwidget.activities;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,7 +15,7 @@ import android.widget.RelativeLayout;
 
 import java.util.Calendar;
 
-import de.appphil.webcamviewerwidget.services.WidgetUpdateService;
+import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.utils.PendingIntents;
 import de.appphil.webcamviewerwidget.utils.Vars;
 

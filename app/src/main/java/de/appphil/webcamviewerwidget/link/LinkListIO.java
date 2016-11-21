@@ -1,16 +1,14 @@
-package de.appphil.webcamviewerwidget;
+package de.appphil.webcamviewerwidget.link;
 
 
 import android.content.Context;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.utils.XMLManager;
 
 public class LinkListIO {

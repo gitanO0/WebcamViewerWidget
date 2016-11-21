@@ -1,4 +1,4 @@
-package de.appphil.webcamviewerwidget;
+package de.appphil.webcamviewerwidget.link;
 
 public class Link {
 

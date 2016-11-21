@@ -4,7 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import de.appphil.webcamviewerwidget.services.WidgetUpdateService;
+import de.appphil.webcamviewerwidget.widgets.services.WidgetUpdateService;
 
 public class PendingIntents {
 

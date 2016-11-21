@@ -1,4 +1,4 @@
-package de.appphil.webcamviewerwidget;
+package de.appphil.webcamviewerwidget.widgets;
 
 
 import android.app.AlarmManager;
@@ -12,8 +12,10 @@ import android.widget.RemoteViews;
 
 import java.util.Calendar;
 
-import de.appphil.webcamviewerwidget.services.WidgetSwitchLinkService;
-import de.appphil.webcamviewerwidget.services.WidgetUpdateService;
+import de.appphil.webcamviewerwidget.R;
+import de.appphil.webcamviewerwidget.widgets.services.WidgetSwitchLinkService;
+import de.appphil.webcamviewerwidget.widgets.services.WidgetUpdateService;
+import de.appphil.webcamviewerwidget.activities.ViewImageActivity;
 import de.appphil.webcamviewerwidget.utils.PendingIntents;
 import de.appphil.webcamviewerwidget.utils.Vars;
 

@@ -1,4 +1,4 @@
-package de.appphil.webcamviewerwidget;
+package de.appphil.webcamviewerwidget.activities;
 
 
 import android.app.Activity;
@@ -17,6 +17,9 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.appphil.webcamviewerwidget.link.Link;
+import de.appphil.webcamviewerwidget.link.LinkListIO;
+import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.utils.CurrentLink;
 
 public class LinkListActivity extends Activity {

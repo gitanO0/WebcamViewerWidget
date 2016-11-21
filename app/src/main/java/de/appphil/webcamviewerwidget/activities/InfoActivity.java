@@ -1,8 +1,10 @@
-package de.appphil.webcamviewerwidget;
+package de.appphil.webcamviewerwidget.activities;
 
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import de.appphil.webcamviewerwidget.R;
 
 public class InfoActivity extends Activity {
 

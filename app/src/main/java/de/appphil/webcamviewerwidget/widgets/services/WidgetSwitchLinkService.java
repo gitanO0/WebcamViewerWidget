@@ -1,4 +1,4 @@
-package de.appphil.webcamviewerwidget.services;
+package de.appphil.webcamviewerwidget.widgets.services;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -6,8 +6,8 @@ import android.content.Intent;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import de.appphil.webcamviewerwidget.Link;
-import de.appphil.webcamviewerwidget.LinkListIO;
+import de.appphil.webcamviewerwidget.link.Link;
+import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.utils.CurrentLink;
 
 public class WidgetSwitchLinkService extends IntentService{
