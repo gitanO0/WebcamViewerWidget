@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.link.Link;
+import de.appphil.webcamviewerwidget.link.LinkListAdapter;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.utils.CurrentLink;
@@ -137,7 +138,7 @@ public class LinkListActivity extends Activity {
             names.add(link.getName());
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, names);
+        LinkListAdapter adapter = new LinkListAdapter(this, linklist, names);
         lv.setAdapter(adapter);
     }
 
