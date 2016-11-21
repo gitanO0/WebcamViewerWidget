@@ -38,19 +38,19 @@ public class LinkListAdapter extends ArrayAdapter<String> {
         } else {
             tv.setTextColor(context.getResources().getColor(R.color.deactivated_text));
         }
-        
+
         return view;
     }
 
     /***
-     * Returns if the link with the given name is activated or not.
+     * Returns if the link with the given name is enabled or not.
      * @param name
      * @return
      */
     private boolean isLinkActivated(String name) {
         for(Link link : linklist) {
             if(link.getName().equals(name)) {
-                return link.isActivated();
+                return link.isEnabled();
             }
         }
         return false;

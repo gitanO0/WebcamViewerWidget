@@ -100,7 +100,7 @@ public class WidgetSwitchLinkService extends IntentService{
     }
 
     /***
-     * Returns the name of the next activated link.
+     * Returns the name of the next enabled link.
      * @param linklist
      * @param currentLinkPosition
      * @return
@@ -112,23 +112,23 @@ public class WidgetSwitchLinkService extends IntentService{
         } else {
             positionNew = currentLinkPosition + 1;
         }
-        // check if that link is deactivated
-        if(!linklist.get(positionNew).isActivated()) {
+        // check if that link is disabled
+        if(!linklist.get(positionNew).isEnabled()) {
             return getNextLinkName(linklist, positionNew);
         } else {
-            // link is activated
+            // link is enabled
             return linklist.get(positionNew).getName();
         }
     }
 
     /***
-     * Checks if the given list contains an activated link.
+     * Checks if the given list contains an enabled link.
      * @param linklist
      * @return
      */
     private boolean containsActivatedLink(ArrayList<Link> linklist) {
         for(Link link : linklist) {
-            if(link.isActivated()) return true;
+            if(link.isEnabled()) return true;
         }
         return false;
     }

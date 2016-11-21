@@ -14,7 +14,7 @@ import de.appphil.webcamviewerwidget.link.Link;
 
 public class XMLManager {
 
-    private static final int versionCode = 3;
+    private static final int versionCode = 4;
 
     /***
      * Returns the xml string for the given link.
@@ -26,7 +26,7 @@ public class XMLManager {
                 "<linkobj>" +
                   "<name>" + link.getName() + "</name>" +
                   "<link>" + link.getLink() + "</link>" +
-                  "<activated>" + link.isActivated() + "</activated>" +
+                  "<enabled>" + link.isEnabled() + "</enabled>" +
                 "</linkobj>";
     }
 
@@ -47,7 +47,17 @@ public class XMLManager {
             String name = "";
             String link = "";
             int versionCode = -1; // -1 -> there's no version code
-            boolean activated = true;
+            boolean enabled = true;
+
+            // get versionCode first
+            versionCode = Integer.parseInt(xmlString.split("<versioncode>")[1].split("</versioncode>")[0]);
+
+            // update old xml files
+            if(versionCode <= 3) {
+                // replace "activated" with "enabled"
+                xmlString = xmlString.replaceAll("activated", "enabled");
+                System.out.println(xmlString);
+            }
 
             xpp.setInput(new StringReader(xmlString));
             int eventType = xpp.getEventType();
@@ -61,8 +71,8 @@ public class XMLManager {
                         lastTag = "name";
                     } else if(xpp.getName().equals("link")) {
                         lastTag = "link";
-                    } else if(xpp.getName().equals("activated")) {
-                        lastTag = "activated";
+                    } else if(xpp.getName().equals("enabled")) {
+                        lastTag = "enabled";
                     }
                 } else if(eventType == XmlPullParser.END_TAG) {
                     if(xpp.getName().equals("linkobj")) {
@@ -70,21 +80,22 @@ public class XMLManager {
                             // "update" to new
                             linklist.add(new Link(name, link, true));
                         } else {
-                            linklist.add(new Link(name, link, activated));
+                            linklist.add(new Link(name, link, enabled));
                         }
                     }
                 } else if(eventType == XmlPullParser.TEXT) {
                     if(lastTag.equals("versioncode")) {
-                        versionCode = Integer.parseInt(xpp.getText());
+
                     } else if(lastTag.equals("name")) {
                         name = xpp.getText();
                     } else if(lastTag.equals("link")) {
                         link = xpp.getText();
-                    } else if(lastTag.equals("activated")) {
+                    } else if(lastTag.equals("enabled")) {
+                        System.out.println(xpp.getText());
                         if(xpp.getText().equals("true")) {
-                            activated = true;
+                            enabled = true;
                         } else {
-                            activated = false;
+                            enabled = false;
                         }
                     }
                 }

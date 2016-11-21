@@ -158,7 +158,7 @@ public class LinkListActivity extends Activity {
         etLink.setText(link.getLink());
 
         final CheckBox cbActivated = (CheckBox) dialog.findViewById(R.id.dialog_editlink_cb_activated);
-        cbActivated.setChecked(link.isActivated());
+        cbActivated.setChecked(link.isEnabled());
 
         Button btnCancel = (Button) dialog.findViewById(R.id.dialog_editlink_btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {

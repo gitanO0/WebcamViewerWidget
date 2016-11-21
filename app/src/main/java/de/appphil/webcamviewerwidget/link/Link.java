@@ -18,20 +18,20 @@ public class Link {
     private boolean checked = false;
 
     /***
-     * Needed to check if the link is activated or deactivated.
+     * Needed to check if the link is enabled or disabled.
      */
-    private boolean activated;
+    private boolean enabled;
 
     /***
      * Constructor for Link.
      * @param name Name of the link.
      * @param link Link.
-     * @param activated If the link is activated or not.
+     * @param enabled If the link is enabled or not.
      */
-    public Link(String name, String link, boolean activated) {
+    public Link(String name, String link, boolean enabled) {
         this.name = name;
         this.link = link;
-        this.activated = activated;
+        this.enabled = enabled;
     }
 
     /***
@@ -67,10 +67,10 @@ public class Link {
     }
 
     /***
-     * Returns if the link is activated or not.
+     * Returns if the link is enabled or not.
      * @return
      */
-    public boolean isActivated() {
-        return activated;
+    public boolean isEnabled() {
+        return enabled;
     }
 }
