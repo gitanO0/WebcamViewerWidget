@@ -5,13 +5,16 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -19,16 +22,19 @@ import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListAdapter;
+import de.appphil.webcamviewerwidget.link.LinkListClickAction;
+import de.appphil.webcamviewerwidget.link.LinkListEditAdapter;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
+import de.appphil.webcamviewerwidget.link.LinkListOnClickListener;
 import de.appphil.webcamviewerwidget.utils.CurrentLink;
 
 public class LinkListActivity extends Activity {
 
     /***
-     * Button to show a dialog to add a new link to the list.
+     * Button to edit links. (After clicking it's the back button)
      */
-    private Button btnAddLink;
+    private Button btnEdit;
 
     /***
      * Button to export links.
@@ -50,16 +56,42 @@ public class LinkListActivity extends Activity {
      */
     private ArrayList<Link> linklist;
 
+    /***
+     * Button to add a link to the list.
+     */
+    private Button btnAdd;
+
+    /***
+     * Wheter the user edits the list or not.
+     */
+    private boolean editing = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_linklist);
 
-        btnAddLink = (Button) findViewById(R.id.linklist_btn_add_link);
-        btnAddLink.setOnClickListener(new View.OnClickListener() {
+        btnEdit = (Button) findViewById(R.id.linklist_btn_edit);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAddLinkDialog();
+                if(!editing) {
+                    LinkListEditAdapter adapter = new LinkListEditAdapter(getApplicationContext(), linklist, new LinkListOnClickListener() {
+                        @Override
+                        public void onClick(int position, LinkListClickAction action) {
+                            if (action == LinkListClickAction.EDIT) {
+                                showEditLinkDialog(position);
+                            } else if (action == LinkListClickAction.DELETE) {
+                                showDeleteLinkDialog(position);
+                            }
+                        }
+                    });
+                    lv.setAdapter(adapter);
+                    editing = true;
+                    btnEdit.setText(getResources().getString(R.string.back));
+                } else {
+                    updateListView();
+                }
             }
         });
 
@@ -93,6 +125,14 @@ public class LinkListActivity extends Activity {
                 // item of list view was clicked
                 // this should be the current link
                 CurrentLink.saveCurrentLinkName(getApplicationContext(), linklist.get(i).getName());
+            }
+        });
+
+        btnAdd = (Button) findViewById(R.id.linklist_btn_add);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddLinkDialog();
             }
         });
 
@@ -133,13 +173,25 @@ public class LinkListActivity extends Activity {
         if(linklist.isEmpty()) return;
 
         // get array list with link names
+        ArrayList<String> names = getLinkNames();
+
+        LinkListAdapter adapter = new LinkListAdapter(this, linklist, names);
+        lv.setAdapter(adapter);
+
+        editing = false;
+        btnEdit.setText(getResources().getString(R.string.edit));
+    }
+
+    /***
+     * Returns an arraylist with the names of the links in the linklist.
+     * @return
+     */
+    private ArrayList<String> getLinkNames() {
         ArrayList<String> names = new ArrayList<String>();
         for(Link link : linklist) {
             names.add(link.getName());
         }
-
-        LinkListAdapter adapter = new LinkListAdapter(this, linklist, names);
-        lv.setAdapter(adapter);
+        return names;
     }
 
     /***

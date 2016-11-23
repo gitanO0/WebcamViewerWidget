@@ -35,4 +35,6 @@
     <string name="loading_failed">Laden fehlgeschlagen</string>
     <string name="download_succeeded">Download erfolgreich</string>
     <string name="activated">Aktiviert</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="back">Zurück</string>
 </resources>

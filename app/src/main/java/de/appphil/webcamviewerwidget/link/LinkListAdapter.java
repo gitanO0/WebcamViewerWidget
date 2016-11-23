@@ -21,7 +21,7 @@ public class LinkListAdapter extends ArrayAdapter<String> {
     private ArrayList<Link> linklist;
 
     public LinkListAdapter(Context context, ArrayList<Link> linklist, ArrayList<String> linkNames) {
-        super(context, android.R.layout.simple_list_item_1, linkNames);
+        super(context, R.layout.linklist_item_normal, linkNames);
         this.context = context;
         this.linklist = linklist;
     }
@@ -31,7 +31,7 @@ public class LinkListAdapter extends ArrayAdapter<String> {
         boolean activated = isLinkActivated(getItem(position));
 
         View view = super.getView(position, convertView, parent);
-        TextView tv = (TextView) view.findViewById(android.R.id.text1);
+        TextView tv = (TextView) view.findViewById(R.id.text1);
 
         if(activated) {
             tv.setTextColor(context.getResources().getColor(R.color.activated_text));
