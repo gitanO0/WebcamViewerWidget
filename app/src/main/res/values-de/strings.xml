@@ -9,7 +9,6 @@
     <string name="yes">Ja</string>
     <string name="delete_link_sure">Link entfernen?</string>
     <string name="failed_to_delete_link">Beim Entfernen des Links ist ein Fehler unterlaufen!</string>
-    <string name="switch_image">Wechseln</string>
     <string name="reload">Neu laden</string>
     <string name="export_links">Exportieren</string>
     <string name="import_links">Importieren</string>

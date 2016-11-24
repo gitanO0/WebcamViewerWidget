@@ -11,7 +11,6 @@
     <string name="yes">Yes</string>
     <string name="delete_link_sure">Delete link?</string>
     <string name="failed_to_delete_link">Failed to delete link!</string>
-    <string name="switch_image">Switch</string>
     <string name="reload">Reload</string>
     <string name="export_links">Export</string>
     <string name="import_links">Import</string>

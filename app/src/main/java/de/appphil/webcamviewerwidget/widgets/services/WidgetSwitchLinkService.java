@@ -19,6 +19,14 @@ public class WidgetSwitchLinkService extends IntentService{
     @Override
     protected void onHandleIntent(Intent intent) {
         System.out.println("Running WidgetSwitchLinkService now!");
+
+        boolean left = intent.getBooleanExtra("left", false);
+        if (left) {
+            System.out.println("Button left clicked.");
+        } else {
+            System.out.println("Button right clicked.");
+        }
+
         // get list with all links
         ArrayList<Link> linklist = getLinkList();
         if(linklist == null) return;
@@ -34,7 +42,7 @@ public class WidgetSwitchLinkService extends IntentService{
         int currentLinkPosition = getPositionOfLinkName(linklist, currentLinkName);
 
         if(containsActivatedLink(linklist)) {
-            String nextLinkName = getNextLinkName(linklist, currentLinkPosition);
+            String nextLinkName = getNextLinkName(linklist, currentLinkPosition, left);
             // set new current link
             CurrentLink.saveCurrentLinkName(getApplicationContext(), nextLinkName);
         } else {
@@ -103,18 +111,25 @@ public class WidgetSwitchLinkService extends IntentService{
      * Returns the name of the next enabled link.
      * @param linklist
      * @param currentLinkPosition
+     * @param moveLeft If the user clicked the left or right button.
      * @return
      */
-    private String getNextLinkName(ArrayList<Link> linklist, int currentLinkPosition) {
+    private String getNextLinkName(ArrayList<Link> linklist, int currentLinkPosition, boolean moveLeft) {
         int positionNew = 0;
-        if(currentLinkPosition == linklist.size()-1) {
+        if((currentLinkPosition == linklist.size()-1 && !moveLeft)) {
             positionNew = 0;
+        } else if(currentLinkPosition == 0 && moveLeft) {
+            positionNew = linklist.size() - 1;
         } else {
-            positionNew = currentLinkPosition + 1;
+            if(!moveLeft) {
+                positionNew = currentLinkPosition + 1;
+            } else {
+                positionNew = currentLinkPosition - 1;
+            }
         }
         // check if that link is disabled
         if(!linklist.get(positionNew).isEnabled()) {
-            return getNextLinkName(linklist, positionNew);
+            return getNextLinkName(linklist, positionNew, moveLeft);
         } else {
             // link is enabled
             return linklist.get(positionNew).getName();

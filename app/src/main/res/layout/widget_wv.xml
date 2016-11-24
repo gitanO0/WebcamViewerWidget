@@ -6,25 +6,16 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/switch_image"
-        android:id="@+id/widget_wv_btn_switch"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/reload"
         android:id="@+id/widget_wv_btn_reload"
-        android:layout_alignBottom="@+id/widget_wv_btn_switch"
+        android:layout_alignBottom="@+id/widget_wv_btn_left"
         android:layout_alignParentEnd="true" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/widget_wv_iv"
-        android:layout_below="@+id/widget_wv_btn_switch"
+        android:layout_below="@+id/widget_wv_btn_left"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
@@ -36,7 +27,24 @@
         android:id="@+id/widget_wv_tv_info"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@id/widget_wv_btn_reload"
-        android:layout_toRightOf="@id/widget_wv_btn_switch"
-        android:layout_alignBottom="@+id/widget_wv_btn_switch"
-        android:gravity="center_vertical|center_horizontal"/>
+        android:layout_alignBottom="@+id/widget_wv_btn_left"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_toEndOf="@+id/widget_wv_btn_right"
+        android:layout_toStartOf="@+id/widget_wv_btn_reload"/>
+
+    <Button
+        android:text="&lt;"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/widget_wv_btn_left"
+        android:layout_width="50dp" />
+
+    <Button
+        android:text="&gt;"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/widget_wv_btn_left"
+        android:id="@+id/widget_wv_btn_right" />
 </RelativeLayout>

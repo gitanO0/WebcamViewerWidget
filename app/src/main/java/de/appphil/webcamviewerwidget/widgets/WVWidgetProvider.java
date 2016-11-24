@@ -72,11 +72,20 @@ public class WVWidgetProvider extends AppWidgetProvider {
             views.setOnClickPendingIntent(R.id.widget_wv_btn_reload, piReload);
 
             /*
-            Switch Button
+            Left
              */
-            Intent intentSwitch = new Intent(context, WidgetSwitchLinkService.class);
-            PendingIntent piSwitch = PendingIntent.getService(context, 0, intentSwitch, 0);
-            views.setOnClickPendingIntent(R.id.widget_wv_btn_switch, piSwitch);
+            Intent intentLeft = new Intent(context, WidgetSwitchLinkService.class);
+            intentLeft.putExtra("left", true);
+            PendingIntent piLeft = PendingIntent.getService(context, 0, intentLeft, PendingIntent.FLAG_CANCEL_CURRENT);
+            views.setOnClickPendingIntent(R.id.widget_wv_btn_left, piLeft);
+
+            /*
+            Right
+             */
+            Intent intentRight = new Intent(context, WidgetSwitchLinkService.class);
+            intentRight.putExtra("left", false);
+            PendingIntent piRight = PendingIntent.getService(context, 1, intentRight, PendingIntent.FLAG_CANCEL_CURRENT);
+            views.setOnClickPendingIntent(R.id.widget_wv_btn_right, piRight);
 
             /*
             ImageView
