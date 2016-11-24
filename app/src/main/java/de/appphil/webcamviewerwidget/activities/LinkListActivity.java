@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -35,16 +38,6 @@ public class LinkListActivity extends Activity {
      * TextView which acts as a button for editing links.
      */
     private TextView tvEdit;
-
-    /***
-     * Button to export links.
-     */
-    private Button btnExport;
-
-    /***
-     * Button to import links.
-     */
-    private Button btnImport;
 
     /***
      * ListView to shows the linklist.
@@ -105,22 +98,6 @@ public class LinkListActivity extends Activity {
         getActionBar().setCustomView(view);
 
 
-        btnExport = (Button) findViewById(R.id.linklist_btn_export);
-        btnExport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startExportActivity();
-            }
-        });
-
-        btnImport = (Button) findViewById(R.id.linklist_btn_import);
-        btnImport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startImportActivity();
-            }
-        });
-
         lv = (ListView) findViewById(R.id.linklist_lv);
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -156,6 +133,27 @@ public class LinkListActivity extends Activity {
         }
 
         updateListView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_linklist, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_linklist_export:
+                startExportActivity();
+                return true;
+            case R.id.menu_linklist_import:
+                startImportActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /***
