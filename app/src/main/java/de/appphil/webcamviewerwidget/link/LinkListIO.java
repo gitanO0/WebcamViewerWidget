@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.utils.XMLManager;
 
 public class LinkListIO {
