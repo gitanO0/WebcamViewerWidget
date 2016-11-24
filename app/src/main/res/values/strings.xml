@@ -38,5 +38,5 @@
     <string name="download_succeeded">Download succeeded</string>
     <string name="activated">Activated</string>
     <string name="edit">Edit</string>
-    <string name="back">Back</string>
+    <string name="ready_with_editing">Ready</string>
 </resources>

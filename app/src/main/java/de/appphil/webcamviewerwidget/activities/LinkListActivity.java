@@ -1,13 +1,16 @@
 package de.appphil.webcamviewerwidget.activities;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -32,9 +35,9 @@ import de.appphil.webcamviewerwidget.utils.CurrentLink;
 public class LinkListActivity extends Activity {
 
     /***
-     * Button to edit links. (After clicking it's the back button)
+     * TextView which acts as a button for editing links.
      */
-    private Button btnEdit;
+    private TextView tvEdit;
 
     /***
      * Button to export links.
@@ -71,8 +74,14 @@ public class LinkListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_linklist);
 
-        btnEdit = (Button) findViewById(R.id.linklist_btn_edit);
-        btnEdit.setOnClickListener(new View.OnClickListener() {
+        // ActionBar
+        // first: Get the custom actionbar view
+        LayoutInflater inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.actionbar_linklist, null);
+
+        // get the textview which acts as a button to edit the linklist
+        tvEdit = (TextView) view.findViewById(R.id.actionbar_linklist_tv_edit);
+        tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!editing) {
@@ -88,12 +97,16 @@ public class LinkListActivity extends Activity {
                     });
                     lv.setAdapter(adapter);
                     editing = true;
-                    btnEdit.setText(getResources().getString(R.string.back));
+                    tvEdit.setText(getResources().getString(R.string.ready_with_editing));
                 } else {
                     updateListView();
                 }
             }
         });
+        // set the custom view
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setCustomView(view);
+
 
         btnExport = (Button) findViewById(R.id.linklist_btn_export);
         btnExport.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +192,7 @@ public class LinkListActivity extends Activity {
         lv.setAdapter(adapter);
 
         editing = false;
-        btnEdit.setText(getResources().getString(R.string.edit));
+        tvEdit.setText(getResources().getString(R.string.edit));
     }
 
     /***
