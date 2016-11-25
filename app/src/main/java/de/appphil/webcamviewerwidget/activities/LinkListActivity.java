@@ -151,13 +151,34 @@ public class LinkListActivity extends Activity {
             case R.id.menu_linklist_import:
                 startImportActivity();
                 return true;
+            case R.id.menu_linklist_settings:
+                startSettingsActivity();
+                return true;
+            case R.id.menu_linklist_info:
+                startInfoActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     /***
-     * Gets called when the user clicks on the export button.
+     * Starts the SettingsActivity.
+     */
+    private void startSettingsActivity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    /***
+     * Starts the InfoActivity.
+     */
+    private void startInfoActivity() {
+        Intent intent = new Intent(this, InfoActivity.class);
+        startActivity(intent);
+    }
+
+    /***
      * Starts the ExportActivity.
      */
     private void startExportActivity() {
@@ -166,7 +187,6 @@ public class LinkListActivity extends Activity {
     }
 
     /***
-     * Gets called when the user clicks on the import button.
      * Starts the ImportActivity.
      */
     private void startImportActivity() {
