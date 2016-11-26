@@ -14,7 +14,7 @@ import de.appphil.webcamviewerwidget.link.Link;
 
 public class XMLManager {
 
-    private static final int versionCode = 4;
+    private static final int versionCode = 5;
 
     /***
      * Returns the xml string for the given link.
