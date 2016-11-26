@@ -16,7 +16,7 @@ public class LinkListIO {
 
     /***
      * Saves the linklist to file.
-     * @param context
+     * @param context Context
      * @param linklist ArrayList with Link objects.
      * @throws IOException
      */
@@ -36,13 +36,13 @@ public class LinkListIO {
 
     /***
      * Loads the linklist from file.
-     * @param context
+     * @param context Context
      * @return ArrayList with Link objects.
      * @throws IOException
      * @throws ClassNotFoundException
      */
     public static ArrayList<Link> loadLinklist(Context context) throws IOException, ClassNotFoundException {
-        ArrayList<Link> linklist = new ArrayList<Link>();
+        ArrayList<Link> linklist = new ArrayList<>();
 
         // return empty linklist when there's no file
         if(!linklistFileExists(context)) return linklist;
@@ -68,12 +68,12 @@ public class LinkListIO {
 
     /***
      * Gets the link by the given name.
-     * @param context
+     * @param context Context
      * @param name Name of the link.
      * @return Link or empty string if no link with the given name was found.
      */
     public static String getLinkByName(Context context, String name) {
-        ArrayList<Link> linklist = null;
+        ArrayList<Link> linklist;
         try {
             linklist = loadLinklist(context);
         } catch (IOException e) {

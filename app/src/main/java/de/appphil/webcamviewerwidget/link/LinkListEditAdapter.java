@@ -66,7 +66,7 @@ public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapte
 
     /***
      * Sets the linklist.
-     * @param linklist
+     * @param linklist ArrayList with all the Link objects.
      */
     public void updateLinklist(ArrayList<Link> linklist) {
         this.linklist = linklist;

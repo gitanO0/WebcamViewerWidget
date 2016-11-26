@@ -122,7 +122,7 @@ public class WidgetUpdateService extends IntentService {
 
     /***
      * Changes the info text in the widget.
-     * @param text
+     * @param text Text that should be shown.
      */
     private void updateWidgetInfoText(String text) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
@@ -151,15 +151,13 @@ public class WidgetUpdateService extends IntentService {
     /***
      * Tries to get the current link name.
      * If there's no current link saved it returns an empty string.
-     * @return
+     * @return Name of the current link as string.
      */
     private String getCurrentLinkName() {
         String currentLinkName = "";
         try {
             currentLinkName = CurrentLink.getCurrentLinkName(getApplicationContext());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return currentLinkName;

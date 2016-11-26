@@ -16,7 +16,7 @@ public class CurrentLink {
     /***
      * Gets the current link name from shared preferences.
      * If there's no current link name saved it returns the first of the linklist or nothing.
-     * @param context
+     * @param context Context
      * @return Name of current link or empty string if no link added to list.
      * @throws IOException
      * @throws ClassNotFoundException
@@ -40,7 +40,7 @@ public class CurrentLink {
 
     /***
      * Saves the given link name to shared preferences.
-     * @param context
+     * @param context Context
      * @param name Name of the link.
      */
     public static void saveCurrentLinkName(Context context, String name) {

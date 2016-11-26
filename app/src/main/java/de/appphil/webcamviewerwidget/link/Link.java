@@ -52,7 +52,7 @@ public class Link {
 
     /***
      * Changes the checked state.
-     * @param checked
+     * @param checked If the link is checked.
      */
     public void setChecked(boolean checked) {
         this.checked = checked;
@@ -60,7 +60,7 @@ public class Link {
 
     /***
      * Returns if the link is checked.
-     * @return
+     * @return If the link is checked.
      */
     public boolean isChecked() {
         return checked;
@@ -68,7 +68,7 @@ public class Link {
 
     /***
      * Returns if the link is enabled or not.
-     * @return
+     * @return If the link is enabled.
      */
     public boolean isEnabled() {
         return enabled;

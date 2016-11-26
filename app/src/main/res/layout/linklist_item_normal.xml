@@ -8,5 +8,4 @@
     android:paddingEnd="10dp"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
-    android:text="Hello"
     android:layout_alignParentStart="true" />

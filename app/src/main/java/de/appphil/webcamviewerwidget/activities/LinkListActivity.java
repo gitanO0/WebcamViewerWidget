@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -16,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -136,8 +134,10 @@ public class LinkListActivity extends Activity {
             }
         });
         // set the custom view
-        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getActionBar().setCustomView(view);
+        if(getActionBar() != null) {
+            getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getActionBar().setCustomView(view);
+        }
 
 
         // recyclerview to show the list
@@ -156,9 +156,7 @@ public class LinkListActivity extends Activity {
         // load linklist
         try {
             linklist = LinkListIO.loadLinklist(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -357,8 +355,8 @@ public class LinkListActivity extends Activity {
 
     /***
      * Returns the position of the given link in the linklist.
-     * @param link
-     * @return
+     * @param link Link object where the position is searched.
+     * @return Position of the given link object in the linklist.
      */
     private int getItemPosition(Link link) {
         for(int i = 0; i < linklist.size(); i++) {

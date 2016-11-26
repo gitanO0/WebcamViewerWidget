@@ -41,7 +41,7 @@ public class WidgetSwitchLinkService extends IntentService{
         // get the position of the link in the list
         int currentLinkPosition = getPositionOfLinkName(linklist, currentLinkName);
 
-        if(containsActivatedLink(linklist)) {
+        if(containsEnabledLink(linklist)) {
             String nextLinkName = getNextLinkName(linklist, currentLinkPosition, left);
             // set new current link
             CurrentLink.saveCurrentLinkName(getApplicationContext(), nextLinkName);
@@ -80,9 +80,7 @@ public class WidgetSwitchLinkService extends IntentService{
         String currentLinkName = "";
         try {
             currentLinkName = CurrentLink.getCurrentLinkName(getApplicationContext());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return currentLinkName;
@@ -95,27 +93,23 @@ public class WidgetSwitchLinkService extends IntentService{
      * @return ArrayList with Link objects or null.
      */
     private ArrayList<Link> getLinkList() {
-        ArrayList<Link> linklist = null;
         try {
-            linklist = LinkListIO.loadLinklist(getApplicationContext());
-            return linklist;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+            return LinkListIO.loadLinklist(getApplicationContext());
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return linklist;
+        return null;
     }
 
     /***
      * Returns the name of the next enabled link.
-     * @param linklist
-     * @param currentLinkPosition
+     * @param linklist ArrayList containing all the Link objects.
+     * @param currentLinkPosition Position of the current link in the ArrayList.
      * @param moveLeft If the user clicked the left or right button.
-     * @return
+     * @return Name of the next link as string.
      */
     private String getNextLinkName(ArrayList<Link> linklist, int currentLinkPosition, boolean moveLeft) {
-        int positionNew = 0;
+        int positionNew;
         if((currentLinkPosition == linklist.size()-1 && !moveLeft)) {
             positionNew = 0;
         } else if(currentLinkPosition == 0 && moveLeft) {
@@ -138,10 +132,10 @@ public class WidgetSwitchLinkService extends IntentService{
 
     /***
      * Checks if the given list contains an enabled link.
-     * @param linklist
-     * @return
+     * @param linklist ArrayList containing all the Link objects.
+     * @return If the given linklist contains one or more enabled links.
      */
-    private boolean containsActivatedLink(ArrayList<Link> linklist) {
+    private boolean containsEnabledLink(ArrayList<Link> linklist) {
         for(Link link : linklist) {
             if(link.isEnabled()) return true;
         }

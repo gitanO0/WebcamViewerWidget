@@ -14,9 +14,9 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
-import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.utils.CheckBoxListViewAdapter;
 
 public class ExportActivity extends Activity {
@@ -44,12 +44,10 @@ public class ExportActivity extends Activity {
         lv = (ListView) findViewById(R.id.export_lv);
 
         // get the linklist
-        ArrayList<Link> linklist = new ArrayList<Link>();
+        ArrayList<Link> linklist = new ArrayList<>();
         try {
             linklist = LinkListIO.loadLinklist(getApplicationContext());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 

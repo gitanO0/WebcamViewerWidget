@@ -18,7 +18,7 @@ public class XMLManager {
 
     /***
      * Returns the xml string for the given link.
-     * @param link
+     * @param link Link object that should be parsed
      * @return XML data as string.
      */
     public static String linkToXML(Link link) {
@@ -32,11 +32,11 @@ public class XMLManager {
 
     /***
      * Creates an arraylist with Link objects from the given xml string.
-     * @param xmlString
-     * @return
+     * @param xmlString String read from the file.
+     * @return ArrayList with Link objects read from xmlString.
      */
     public static ArrayList<Link> getLinklistFromXML(String xmlString) {
-        ArrayList<Link> linklist = new ArrayList<Link>();
+        ArrayList<Link> linklist = new ArrayList<>();
 
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -46,11 +46,10 @@ public class XMLManager {
             String lastTag = "";
             String name = "";
             String link = "";
-            int versionCode = -1; // -1 -> there's no version code
             boolean enabled = true;
 
             // get versionCode first
-            versionCode = Integer.parseInt(xmlString.split("<versioncode>")[1].split("</versioncode>")[0]);
+            int versionCode = Integer.parseInt(xmlString.split("<versioncode>")[1].split("</versioncode>")[0]);
 
             // update old xml files
             if(versionCode <= 3) {
@@ -99,9 +98,7 @@ public class XMLManager {
                 }
                 eventType = xpp.next();
             }
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
 

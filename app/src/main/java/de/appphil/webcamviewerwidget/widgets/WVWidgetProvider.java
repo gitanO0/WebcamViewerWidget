@@ -56,11 +56,9 @@ public class WVWidgetProvider extends AppWidgetProvider {
 
     public void onUpdate(final Context context, AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         System.out.println("onUpdate called");
-        final int n = appWidgetIds.length;
 
         // Perform this loop procedure for each App Widget that belongs to this provider
-        for (int i = 0; i < n; i++) {
-            int appWidgetId = appWidgetIds[i];
+        for(int appWidgetId : appWidgetIds) {
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_wv);
 

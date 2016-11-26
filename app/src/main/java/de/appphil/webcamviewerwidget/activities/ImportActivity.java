@@ -57,7 +57,7 @@ public class ImportActivity extends Activity {
         }
 
         // try to "read" the input
-        ArrayList<Link> importedLinks = new ArrayList<Link>();
+        ArrayList<Link> importedLinks = new ArrayList<>();
         try {
             String[] parts = input.split("\\}");
             for (String part : parts) {
@@ -79,10 +79,7 @@ public class ImportActivity extends Activity {
             LinkListIO.saveLinklist(getApplicationContext(), linklist);
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.import_completed), Toast.LENGTH_LONG).show();
             finish();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showImportFailedToast();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             showImportFailedToast();
         }
