@@ -7,6 +7,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,11 +27,11 @@ import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListAdapter;
-import de.appphil.webcamviewerwidget.link.LinkListClickAction;
 import de.appphil.webcamviewerwidget.link.LinkListEditAdapter;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
-import de.appphil.webcamviewerwidget.link.LinkListOnClickListener;
+import de.appphil.webcamviewerwidget.link.RVEditOnItemClickListener;
+import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
 import de.appphil.webcamviewerwidget.utils.CurrentLink;
 
 public class LinkListActivity extends Activity {
@@ -40,9 +42,9 @@ public class LinkListActivity extends Activity {
     private TextView tvEdit;
 
     /***
-     * ListView to shows the linklist.
+     * RecyclerView to show the linklist.
      */
-    private ListView lv;
+    private RecyclerView rv;
 
     /***
      * Contains the link objects.
@@ -75,21 +77,23 @@ public class LinkListActivity extends Activity {
             @Override
             public void onClick(View view) {
                 if(!editing) {
-                    LinkListEditAdapter adapter = new LinkListEditAdapter(getApplicationContext(), linklist, new LinkListOnClickListener() {
+                    LinkListEditAdapter adapter = new LinkListEditAdapter(getApplicationContext(), linklist, new RVEditOnItemClickListener() {
                         @Override
-                        public void onClick(int position, LinkListClickAction action) {
-                            if (action == LinkListClickAction.EDIT) {
-                                showEditLinkDialog(position);
-                            } else if (action == LinkListClickAction.DELETE) {
-                                showDeleteLinkDialog(position);
-                            }
+                        public void onItemClickEdit(Link link) {
+                            showEditLinkDialog(link);
+                        }
+
+                        @Override
+                        public void onItemClickDelete(Link link) {
+                            showDeleteLinkDialog(link);
                         }
                     });
-                    lv.setAdapter(adapter);
+                    rv.setAdapter(adapter);
+
                     editing = true;
                     tvEdit.setText(getResources().getString(R.string.ready_with_editing));
                 } else {
-                    updateListView();
+                    updateRecyclerView();
                 }
             }
         });
@@ -98,22 +102,10 @@ public class LinkListActivity extends Activity {
         getActionBar().setCustomView(view);
 
 
-        lv = (ListView) findViewById(R.id.linklist_lv);
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int itemPosition, long l) {
-                showEditLinkDialog(itemPosition);
-                return true;
-            }
-        });
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // item of list view was clicked
-                // this should be the current link
-                CurrentLink.saveCurrentLinkName(getApplicationContext(), linklist.get(i).getName());
-            }
-        });
+        // recyclerview to show the list
+        rv = (RecyclerView) findViewById(R.id.linklist_rv);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(mLayoutManager);
 
         btnAdd = (Button) findViewById(R.id.linklist_btn_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +124,7 @@ public class LinkListActivity extends Activity {
             e.printStackTrace();
         }
 
-        updateListView();
+        updateRecyclerView();
     }
 
     @Override
@@ -160,6 +152,25 @@ public class LinkListActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /***
+     * Puts the link names of the linklist hashmap in the listview.
+     */
+    private void updateRecyclerView() {
+        if(linklist.isEmpty()) return;
+
+        LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
+            @Override
+            public void onItemClick(Link link) {
+                // this should be the current link
+                CurrentLink.saveCurrentLinkName(getApplicationContext(), link.getName());
+            }
+        });
+        rv.setAdapter(adapter);
+
+        editing = false;
+        tvEdit.setText(getResources().getString(R.string.edit));
     }
 
     /***
@@ -195,42 +206,12 @@ public class LinkListActivity extends Activity {
     }
 
     /***
-     * Puts the link names of the linklist hashmap in the listview.
-     */
-    private void updateListView() {
-        if(linklist.isEmpty()) return;
-
-        // get array list with link names
-        ArrayList<String> names = getLinkNames();
-
-        LinkListAdapter adapter = new LinkListAdapter(this, linklist, names);
-        lv.setAdapter(adapter);
-
-        editing = false;
-        tvEdit.setText(getResources().getString(R.string.edit));
-    }
-
-    /***
-     * Returns an arraylist with the names of the links in the linklist.
-     * @return
-     */
-    private ArrayList<String> getLinkNames() {
-        ArrayList<String> names = new ArrayList<String>();
-        for(Link link : linklist) {
-            names.add(link.getName());
-        }
-        return names;
-    }
-
-    /***
      * Shows the dialog to edit or delete the selected link.
-     * @param itemPosition Position of the selected link.
+     * @param link Selected link object.
      */
-    private void showEditLinkDialog(final int itemPosition) {
+    private void showEditLinkDialog(final Link link) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_editlink);
-
-        Link link = linklist.get(itemPosition);
 
         final EditText etName = (EditText) dialog.findViewById(R.id.dialog_editlink_et_name);
         etName.setText(link.getName());
@@ -255,16 +236,16 @@ public class LinkListActivity extends Activity {
             public void onClick(View view) {
                 // get name and link
                 String name = etName.getText().toString();
-                String link = etLink.getText().toString();
+                String linkString = etLink.getText().toString();
                 // check if link should be activated
                 boolean activated = cbActivated.isChecked();
                 // update linklist
-                linklist.set(itemPosition, new Link(name, link, activated));
+                linklist.set(getItemPosition(link), new Link(name, linkString, activated));
                 // save linklist
                 try {
                     LinkListIO.saveLinklist(getApplicationContext(), linklist);
                     // update listview
-                    updateListView();
+                    updateRecyclerView();
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.edit_failed), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -281,7 +262,7 @@ public class LinkListActivity extends Activity {
                 // dismiss dialog
                 dialog.dismiss();
                 // show dialog and ask if the user really wants to delete the link
-                showDeleteLinkDialog(itemPosition);
+                showDeleteLinkDialog(link);
             }
         });
 
@@ -290,9 +271,9 @@ public class LinkListActivity extends Activity {
 
     /***
      * Shows the dialog which asks if the selected link should deleted.
-     * @param itemPosition Position of the selected link.
+     * @param link Selected link object.
      */
-    private void showDeleteLinkDialog(final int itemPosition) {
+    private void showDeleteLinkDialog(final Link link) {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_deletelink);
 
@@ -310,13 +291,13 @@ public class LinkListActivity extends Activity {
             @Override
             public void onClick(View view) {
                 // remove from array list
-                linklist.remove(itemPosition);
+                linklist.remove(getItemPosition(link));
 
                 // save linklist to file
                 try {
                     LinkListIO.saveLinklist(getApplicationContext(), linklist);
                     // update listview
-                    updateListView();
+                    updateRecyclerView();
                 } catch (IOException e) {
                     e.printStackTrace();
                     // show information to user
@@ -329,6 +310,20 @@ public class LinkListActivity extends Activity {
         });
 
         dialog.show();
+    }
+
+    /***
+     * Returns the position of the given link in the linklist.
+     * @param link
+     * @return
+     */
+    private int getItemPosition(Link link) {
+        for(int i = 0; i < linklist.size(); i++) {
+            if(linklist.get(i) == link) {
+                return i;
+            }
+        }
+        return -1; // Fail
     }
 
     /***
@@ -373,7 +368,7 @@ public class LinkListActivity extends Activity {
                     LinkListIO.saveLinklist(getApplicationContext(), linklist);
 
                     // update listview
-                    updateListView();
+                    updateRecyclerView();
                 } catch (IOException e) {
                     e.printStackTrace();
                     // show information to user

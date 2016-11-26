@@ -2,10 +2,10 @@ package de.appphil.webcamviewerwidget.link;
 
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,77 +13,73 @@ import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.R;
 
+public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapter.ViewHolder> {
 
-public class LinkListEditAdapter extends BaseAdapter {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView tv;
+        public ImageView ivEdit;
+        public ImageView ivDelete;
+
+        public ViewHolder(View view) {
+            super(view);
+            this.tv = (TextView) view.findViewById(R.id.linklist_item_tv);
+            this.ivEdit = (ImageView) view.findViewById(R.id.linklist_item_iv_edit);
+            this.ivDelete = (ImageView) view.findViewById(R.id.linklist_item_iv_delete);
+        }
+
+        public void bind(Context context, final Link link, final RVEditOnItemClickListener listener) {
+            tv.setText(link.getName());
+            if(link.isEnabled()) {
+                tv.setTextColor(context.getResources().getColor(R.color.enabled_text));
+            } else {
+                tv.setTextColor(context.getResources().getColor(R.color.disabled_text));
+            }
+
+            ivEdit.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClickEdit(link);
+                }
+            });
+            ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClickDelete(link);
+                }
+            });
+        }
+
+    }
 
     private Context context;
 
     /***
-     * ArrayList containing the Link objects.
+     * List containing the link objects.
      */
     private ArrayList<Link> linklist;
 
-    /***
-     * Listener for clicks on the edit and delete imageview.
-     */
-    private LinkListOnClickListener listener;
+    private RVEditOnItemClickListener listener;
 
-    public LinkListEditAdapter(Context context, ArrayList<Link> linklist, LinkListOnClickListener listener) {
+    public LinkListEditAdapter(Context context, ArrayList<Link> linklist, RVEditOnItemClickListener listener) {
         this.context = context;
         this.linklist = linklist;
         this.listener = listener;
     }
 
     @Override
-    public int getCount() {
-        if(linklist != null) return linklist.size();
-        return 0;
+    public LinkListEditAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // create a new view
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.linklist_item, parent, false);
+
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
     }
 
     @Override
-    public Object getItem(int i) {
-        return linklist.get(i);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.bind(context, linklist.get(position), listener);
     }
 
     @Override
-    public long getItemId(int i) {
-        return 0;
-    }
-
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.linklist_item, null);
-        }
-        boolean activated = linklist.get(position).isEnabled();
-
-        TextView tv = (TextView) view.findViewById(R.id.linklist_item_tv);
-        tv.setText(linklist.get(position).getName());
-
-        if(activated) {
-            tv.setTextColor(context.getResources().getColor(R.color.activated_text));
-        } else {
-            tv.setTextColor(context.getResources().getColor(R.color.deactivated_text));
-        }
-
-        ImageView ivEdit = (ImageView) view.findViewById(R.id.linklist_item_iv_edit);
-        ivEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onClick(position, LinkListClickAction.EDIT);
-            }
-        });
-
-        ImageView ivDelete = (ImageView) view.findViewById(R.id.linklist_item_iv_delete);
-        ivDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onClick(position, LinkListClickAction.DELETE);
-            }
-        });
-
-        return view;
+    public int getItemCount() {
+        return linklist.size();
     }
 }

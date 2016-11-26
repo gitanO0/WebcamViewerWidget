@@ -2,57 +2,73 @@ package de.appphil.webcamviewerwidget.link;
 
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.R;
 
-public class LinkListAdapter extends ArrayAdapter<String> {
+public class LinkListAdapter extends RecyclerView.Adapter<LinkListAdapter.ViewHolder> {
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView tv;
+
+        public ViewHolder(View view) {
+            super(view);
+            this.tv = (TextView) view.findViewById(R.id.text1);
+        }
+
+        public void bind(Context context, final Link link, final RVOnItemClickListener listener) {
+            tv.setText(link.getName());
+            if(link.isEnabled()) {
+                tv.setTextColor(context.getResources().getColor(R.color.enabled_text));
+            } else {
+                tv.setTextColor(context.getResources().getColor(R.color.disabled_text));
+            }
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(link);
+                }
+            });
+        }
+
+    }
 
     private Context context;
 
     /***
-     * ArrayList containing the Link objects.
+     * List containing the link objects.
      */
     private ArrayList<Link> linklist;
 
-    public LinkListAdapter(Context context, ArrayList<Link> linklist, ArrayList<String> linkNames) {
-        super(context, R.layout.linklist_item_normal, linkNames);
+    private RVOnItemClickListener listener;
+
+    public LinkListAdapter(Context context, ArrayList<Link> linklist, RVOnItemClickListener listener) {
         this.context = context;
         this.linklist = linklist;
+        this.listener = listener;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        boolean activated = isLinkActivated(getItem(position));
+    public LinkListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // create a new view
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.linklist_item_normal, parent, false);
 
-        View view = super.getView(position, convertView, parent);
-        TextView tv = (TextView) view.findViewById(R.id.text1);
-
-        if(activated) {
-            tv.setTextColor(context.getResources().getColor(R.color.activated_text));
-        } else {
-            tv.setTextColor(context.getResources().getColor(R.color.deactivated_text));
-        }
-
-        return view;
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
     }
 
-    /***
-     * Returns if the link with the given name is enabled or not.
-     * @param name
-     * @return
-     */
-    private boolean isLinkActivated(String name) {
-        for(Link link : linklist) {
-            if(link.getName().equals(name)) {
-                return link.isEnabled();
-            }
-        }
-        return false;
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.bind(context, linklist.get(position), listener);
+    }
+
+    @Override
+    public int getItemCount() {
+        return linklist.size();
     }
 }
