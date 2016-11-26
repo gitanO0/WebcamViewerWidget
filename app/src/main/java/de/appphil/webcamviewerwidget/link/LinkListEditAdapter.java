@@ -64,6 +64,14 @@ public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapte
         this.listener = listener;
     }
 
+    /***
+     * Sets the linklist.
+     * @param linklist
+     */
+    public void updateLinklist(ArrayList<Link> linklist) {
+        this.linklist = linklist;
+    }
+
     @Override
     public LinkListEditAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view

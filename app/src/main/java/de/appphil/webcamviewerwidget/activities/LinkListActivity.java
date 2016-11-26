@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListAdapter;
@@ -61,6 +63,11 @@ public class LinkListActivity extends Activity {
      */
     private boolean editing = false;
 
+    /***
+     * Allows drag and drop to swap linklist items.
+     */
+    private ItemTouchHelper itemTouchHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +84,7 @@ public class LinkListActivity extends Activity {
             @Override
             public void onClick(View view) {
                 if(!editing) {
-                    LinkListEditAdapter adapter = new LinkListEditAdapter(getApplicationContext(), linklist, new RVEditOnItemClickListener() {
+                    final LinkListEditAdapter adapter = new LinkListEditAdapter(getApplicationContext(), linklist, new RVEditOnItemClickListener() {
                         @Override
                         public void onItemClickEdit(Link link) {
                             showEditLinkDialog(link);
@@ -89,6 +96,37 @@ public class LinkListActivity extends Activity {
                         }
                     });
                     rv.setAdapter(adapter);
+
+                    // allow drag and drop to swap list items
+                    ItemTouchHelper.Callback itemTouchHelperCallback = new ItemTouchHelper.Callback() {
+                        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                            // get viewHolders and targets positions in adapter and then swap them
+                            Collections.swap(linklist, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                            adapter.updateLinklist(linklist);
+                            // notify the adapter that the order switched
+                            adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                            // save linklist
+                            try {
+                                LinkListIO.saveLinklist(getApplicationContext(), linklist);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            return true;
+                        }
+
+                        @Override
+                        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {}
+
+                        @Override
+                        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                            return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
+                                    ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END);
+                        }
+                    };
+
+                    // Create ItemTouchHelper and attach it to the recyclerview
+                    itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+                    itemTouchHelper.attachToRecyclerView(rv);
 
                     editing = true;
                     tvEdit.setText(getResources().getString(R.string.ready_with_editing));
@@ -171,6 +209,11 @@ public class LinkListActivity extends Activity {
 
         editing = false;
         tvEdit.setText(getResources().getString(R.string.edit));
+
+        // item swapping should not be working anymore
+        if(itemTouchHelper != null) {
+            itemTouchHelper.attachToRecyclerView(null);
+        }
     }
 
     /***

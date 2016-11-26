@@ -56,7 +56,6 @@ public class XMLManager {
             if(versionCode <= 3) {
                 // replace "activated" with "enabled"
                 xmlString = xmlString.replaceAll("activated", "enabled");
-                System.out.println(xmlString);
             }
 
             xpp.setInput(new StringReader(xmlString));
@@ -91,7 +90,6 @@ public class XMLManager {
                     } else if(lastTag.equals("link")) {
                         link = xpp.getText();
                     } else if(lastTag.equals("enabled")) {
-                        System.out.println(xpp.getText());
                         if(xpp.getText().equals("true")) {
                             enabled = true;
                         } else {
