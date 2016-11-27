@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/toolbar" />
+
     <Button
         android:text="@string/add"
         android:layout_width="wrap_content"
@@ -17,8 +19,8 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_below="@+id/toolbar"
         android:layout_above="@+id/linklist_btn_add"/>
 
 </RelativeLayout>

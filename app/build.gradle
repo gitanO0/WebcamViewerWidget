@@ -28,6 +28,3 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.0'
 }
 
-configurations {
-    all*.exclude group: 'com.android.support', module: 'support-v4'
-}

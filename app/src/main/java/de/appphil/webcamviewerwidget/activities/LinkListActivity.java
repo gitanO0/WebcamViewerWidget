@@ -1,14 +1,15 @@
 package de.appphil.webcamviewerwidget.activities;
 
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,12 +35,7 @@ import de.appphil.webcamviewerwidget.link.RVEditOnItemClickListener;
 import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
 import de.appphil.webcamviewerwidget.utils.CurrentLink;
 
-public class LinkListActivity extends Activity {
-
-    /***
-     * TextView which acts as a button for editing links.
-     */
-    private TextView tvEdit;
+public class LinkListActivity extends AppCompatActivity {
 
     /***
      * RecyclerView to show the linklist.
@@ -66,21 +62,66 @@ public class LinkListActivity extends Activity {
      */
     private ItemTouchHelper itemTouchHelper;
 
+    /***
+     * Toolbar.
+     */
+    private Toolbar toolbar;
+
+    /***
+     * Menu.
+     */
+    private Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_linklist);
 
-        // ActionBar
-        // first: Get the custom actionbar view
-        LayoutInflater inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.actionbar_linklist, null);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getResources().getString(R.string.linklist));
+        setSupportActionBar(toolbar);
 
-        // get the textview which acts as a button to edit the linklist
-        tvEdit = (TextView) view.findViewById(R.id.actionbar_linklist_tv_edit);
-        tvEdit.setOnClickListener(new View.OnClickListener() {
+        // shadow for toolbar
+        if(Build.VERSION.SDK_INT >= 21) {
+            toolbar.setElevation(25);
+        }
+
+
+        // recyclerview to show the list
+        rv = (RecyclerView) findViewById(R.id.linklist_rv);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(layoutManager);
+
+        btnAdd = (Button) findViewById(R.id.linklist_btn_add);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showAddLinkDialog();
+            }
+        });
+
+        // load linklist
+        try {
+            linklist = LinkListIO.loadLinklist(this);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        updateRecyclerView();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_linklist, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_linklist_edit:
                 if(!editing) {
                     final LinkListEditAdapter adapter = new LinkListEditAdapter(getApplicationContext(), linklist, new RVEditOnItemClickListener() {
                         @Override
@@ -127,52 +168,11 @@ public class LinkListActivity extends Activity {
                     itemTouchHelper.attachToRecyclerView(rv);
 
                     editing = true;
-                    tvEdit.setText(getResources().getString(R.string.ready_with_editing));
+                    item.setTitle(getResources().getString(R.string.ready_with_editing));
                 } else {
                     updateRecyclerView();
                 }
-            }
-        });
-        // set the custom view
-        if(getActionBar() != null) {
-            getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            getActionBar().setCustomView(view);
-        }
-
-
-        // recyclerview to show the list
-        rv = (RecyclerView) findViewById(R.id.linklist_rv);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        rv.setLayoutManager(mLayoutManager);
-
-        btnAdd = (Button) findViewById(R.id.linklist_btn_add);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAddLinkDialog();
-            }
-        });
-
-        // load linklist
-        try {
-            linklist = LinkListIO.loadLinklist(this);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        updateRecyclerView();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_linklist, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+                return true;
             case R.id.menu_linklist_export:
                 startExportActivity();
                 return true;
@@ -206,7 +206,10 @@ public class LinkListActivity extends Activity {
         rv.setAdapter(adapter);
 
         editing = false;
-        tvEdit.setText(getResources().getString(R.string.edit));
+
+        if(menu != null) {
+            menu.findItem(R.id.menu_linklist_edit).setTitle(getResources().getString(R.string.edit));
+        }
 
         // item swapping should not be working anymore
         if(itemTouchHelper != null) {
