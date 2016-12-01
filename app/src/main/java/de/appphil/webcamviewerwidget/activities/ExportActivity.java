@@ -47,7 +47,7 @@ public class ExportActivity extends Activity {
         ArrayList<Link> linklist = new ArrayList<>();
         try {
             linklist = LinkListIO.loadLinklist(getApplicationContext());
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

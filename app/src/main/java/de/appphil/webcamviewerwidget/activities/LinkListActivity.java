@@ -33,7 +33,7 @@ import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.link.RVEditOnItemClickListener;
 import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
-import de.appphil.webcamviewerwidget.utils.CurrentLink;
+import de.appphil.webcamviewerwidget.widgets.WidgetIO;
 
 public class LinkListActivity extends AppCompatActivity {
 
@@ -103,7 +103,7 @@ public class LinkListActivity extends AppCompatActivity {
         // load linklist
         try {
             linklist = LinkListIO.loadLinklist(this);
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -147,7 +147,7 @@ public class LinkListActivity extends AppCompatActivity {
                             // save linklist
                             try {
                                 LinkListIO.saveLinklist(getApplicationContext(), linklist);
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             return true;
@@ -199,8 +199,7 @@ public class LinkListActivity extends AppCompatActivity {
         LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
             @Override
             public void onItemClick(Link link) {
-                // this should be the current link
-                CurrentLink.saveCurrentLinkName(getApplicationContext(), link.getName());
+                // nothing at the moment
             }
         });
         rv.setAdapter(adapter);
@@ -290,7 +289,7 @@ public class LinkListActivity extends AppCompatActivity {
                     LinkListIO.saveLinklist(getApplicationContext(), linklist);
                     // update listview
                     updateRecyclerView();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.edit_failed), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
@@ -342,7 +341,7 @@ public class LinkListActivity extends AppCompatActivity {
                     LinkListIO.saveLinklist(getApplicationContext(), linklist);
                     // update listview
                     updateRecyclerView();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     // show information to user
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.failed_to_delete_link), Toast.LENGTH_LONG).show();
@@ -413,7 +412,7 @@ public class LinkListActivity extends AppCompatActivity {
 
                     // update listview
                     updateRecyclerView();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     // show information to user
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.failed_to_add_link), Toast.LENGTH_LONG).show();

@@ -82,6 +82,8 @@ public class ImportActivity extends Activity {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             showImportFailedToast();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

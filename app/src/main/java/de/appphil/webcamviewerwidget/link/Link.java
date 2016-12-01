@@ -1,15 +1,21 @@
 package de.appphil.webcamviewerwidget.link;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
+@Root(name="linkobj")
 public class Link {
 
     /***
      * Name of the link.
      */
+    @Element(name="name")
     private String name;
 
     /***
      * Link to the image.
      */
+    @Element(name="link")
     private String link;
 
     /***
@@ -20,6 +26,7 @@ public class Link {
     /***
      * Needed to check if the link is enabled or disabled.
      */
+    @Element(name="enabled")
     private boolean enabled;
 
     /***
@@ -28,7 +35,7 @@ public class Link {
      * @param link Link.
      * @param enabled If the link is enabled or not.
      */
-    public Link(String name, String link, boolean enabled) {
+    public Link(@Element(name="name")String name, @Element(name="link")String link, @Element(name="enabled")boolean enabled) {
         this.name = name;
         this.link = link;
         this.enabled = enabled;
