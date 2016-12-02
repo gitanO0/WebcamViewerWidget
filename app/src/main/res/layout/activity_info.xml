@@ -60,4 +60,24 @@
         android:id="@+id/info_tv_photoview_link"
         android:layout_below="@+id/info_tv_picasso_link"
         android:layout_toEndOf="@+id/info_tv_photoview_title" />
+
+    <TextView
+        android:text="Simple XML:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_tv_photoview_link"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_alignParentStart="true"
+        android:id="@+id/info_tv_simplexml_title" />
+
+    <TextView
+        android:text="http://simple.sourceforge.net/"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:autoLink="web"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_tv_photoview_link"
+        android:layout_toEndOf="@+id/info_tv_simplexml_title"
+        android:id="@+id/info_tv_simplexml_link" />
+
 </RelativeLayout>
