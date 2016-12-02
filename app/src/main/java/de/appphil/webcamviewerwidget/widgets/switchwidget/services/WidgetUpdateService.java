@@ -1,4 +1,4 @@
-package de.appphil.webcamviewerwidget.widgets.services;
+package de.appphil.webcamviewerwidget.widgets.switchwidget.services;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
@@ -19,8 +19,8 @@ import java.io.IOException;
 
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
-import de.appphil.webcamviewerwidget.widgets.WVWidgetProvider;
-import de.appphil.webcamviewerwidget.utils.CurrentLink;
+import de.appphil.webcamviewerwidget.widgets.WidgetIO;
+import de.appphil.webcamviewerwidget.widgets.switchwidget.SwitchWidgetProvider;
 import de.appphil.webcamviewerwidget.utils.Vars;
 
 public class WidgetUpdateService extends IntentService {
@@ -34,6 +34,9 @@ public class WidgetUpdateService extends IntentService {
         System.out.println("Running WidgetUpdateService now!");
 
         String info = null;
+
+        int id = intent.getIntExtra("id", 0);
+        System.out.println("Updating widget with id: " + id);
 
         // check if there's an internet connection
         ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -74,7 +77,7 @@ public class WidgetUpdateService extends IntentService {
         }
 
         // get the current link
-        String currentLink = getCurrentLink();
+        String currentLink = getCurrentLink(id);
         if(currentLink.isEmpty()) return;
 
         System.out.println("Current Link is: " + currentLink);
@@ -94,7 +97,9 @@ public class WidgetUpdateService extends IntentService {
         if(bitmap == null) return;
 
         try {
-            File file = new File(getFilesDir() + "/" + Vars.IMAGE_FILENAME);
+            File folder = new File(getFilesDir() + "/" + id);
+            if(!folder.exists()) folder.mkdir();
+            File file = new File(getFilesDir() + "/" + id + "/" + Vars.IMAGE_FILENAME);
             FileOutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
 
@@ -107,16 +112,15 @@ public class WidgetUpdateService extends IntentService {
         }
 
         if(info == null) {
-            info = getCurrentLinkName() + ":";
+            info = getCurrentLinkName(id) + ":";
         }
 
         // update widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_wv);
-        ComponentName thisWidget = new ComponentName(getApplication(), WVWidgetProvider.class);
+        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
         remoteViews.setImageViewBitmap(R.id.widget_wv_iv, bitmap);
         remoteViews.setTextViewText(R.id.widget_wv_tv_info, info);
-        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+        appWidgetManager.updateAppWidget(id, remoteViews);
 
     }
 
@@ -126,8 +130,8 @@ public class WidgetUpdateService extends IntentService {
      */
     private void updateWidgetInfoText(String text) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_wv);
-        ComponentName thisWidget = new ComponentName(getApplication(), WVWidgetProvider.class);
+        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
+        ComponentName thisWidget = new ComponentName(getApplication(), SwitchWidgetProvider.class);
         remoteViews.setTextViewText(R.id.widget_wv_tv_info, text);
         appWidgetManager.updateAppWidget(thisWidget, remoteViews);
     }
@@ -136,11 +140,12 @@ public class WidgetUpdateService extends IntentService {
      * Tries to get the current link.
      * If there's a current link then it returns that one.
      * If there's no current link saved it returns an empty string.
+     * @param id  Id of the widget.
      * @return String with link or empty when there's no current link saved.
      */
-    private String getCurrentLink() {
+    private String getCurrentLink(int id) {
         // get current link name
-        String currentLinkName = getCurrentLinkName();
+        String currentLinkName = getCurrentLinkName(id);
 
         if(currentLinkName.isEmpty()) return currentLinkName;
 
@@ -151,13 +156,14 @@ public class WidgetUpdateService extends IntentService {
     /***
      * Tries to get the current link name.
      * If there's no current link saved it returns an empty string.
+     * @param id Id of the widget.
      * @return Name of the current link as string.
      */
-    private String getCurrentLinkName() {
+    private String getCurrentLinkName(int id) {
         String currentLinkName = "";
         try {
-            currentLinkName = CurrentLink.getCurrentLinkName(getApplicationContext());
-        } catch (IOException | ClassNotFoundException e) {
+            currentLinkName = WidgetIO.getCurrentLinkNameOfSwitchWidgetById(getApplicationContext(), id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return currentLinkName;

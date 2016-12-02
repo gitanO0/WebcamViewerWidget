@@ -19,12 +19,12 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".widgets.WVWidgetProvider" >
+        <receiver android:name=".widgets.switchwidget.SwitchWidgetProvider" android:label="@string/switch_widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/wvwidgetproviderinfo" />
+                android:resource="@xml/switchwidgetproviderinfo" />
         </receiver>
 
         <activity android:name=".activities.ViewImageActivity" />
@@ -34,10 +34,10 @@
         <activity android:name=".activities.InfoActivity" />
 
         <service
-            android:name=".widgets.services.WidgetUpdateService"
+            android:name=".widgets.switchwidget.services.WidgetUpdateService"
             android:exported="false"/>
         <service
-            android:name=".widgets.services.WidgetSwitchLinkService"
+            android:name=".widgets.switchwidget.services.WidgetSwitchLinkService"
             android:exported="false"/>
 
      </application>

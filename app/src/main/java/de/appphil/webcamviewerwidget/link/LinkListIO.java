@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class LinkListIO {
 
     private static final String linklistFilename = "linklist.xml";
+    private static final int versionCode = 6;
 
     /***
      * Saves the linklist to file.
@@ -22,7 +23,7 @@ public class LinkListIO {
      * @throws IOException
      */
     public static void saveLinklist(Context context, ArrayList<Link> linklist) throws Exception {
-        LinkList list = new LinkList(linklist);
+        LinkList list = new LinkList(linklist, versionCode);
 
         Serializer serializer = new Persister();
         FileOutputStream outputStream = context.openFileOutput(linklistFilename, Context.MODE_PRIVATE);

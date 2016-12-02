@@ -1,4 +1,4 @@
-package de.appphil.webcamviewerwidget.widgets.services;
+package de.appphil.webcamviewerwidget.widgets.switchwidget.services;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
-import de.appphil.webcamviewerwidget.utils.CurrentLink;
+import de.appphil.webcamviewerwidget.widgets.WidgetIO;
 
 public class WidgetSwitchLinkService extends IntentService{
 
@@ -27,6 +27,9 @@ public class WidgetSwitchLinkService extends IntentService{
             System.out.println("Button right clicked.");
         }
 
+        int id = intent.getIntExtra("id", 0);
+        System.out.println("Switching on widget with id: " + id);
+
         // get list with all links
         ArrayList<Link> linklist = getLinkList();
         if(linklist == null) return;
@@ -35,7 +38,7 @@ public class WidgetSwitchLinkService extends IntentService{
         if(linklist.size() < 2) return;
 
         // get the current link name
-        String currentLinkName = getCurrentLinkName();
+        String currentLinkName = getCurrentLinkName(id);
         if(currentLinkName.isEmpty()) return;
 
         // get the position of the link in the list
@@ -44,7 +47,11 @@ public class WidgetSwitchLinkService extends IntentService{
         if(containsEnabledLink(linklist)) {
             String nextLinkName = getNextLinkName(linklist, currentLinkPosition, left);
             // set new current link
-            CurrentLink.saveCurrentLinkName(getApplicationContext(), nextLinkName);
+            try {
+                WidgetIO.updateSwitchWidgetSaveCurrentLinkName(getApplicationContext(), id, nextLinkName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             // there's no activated link so the current link can't be switched
             return;
@@ -52,6 +59,7 @@ public class WidgetSwitchLinkService extends IntentService{
 
         // update the widget image (done by WidgetUpdateService)
         Intent updateService = new Intent(this, WidgetUpdateService.class);
+        updateService.putExtra("id", id);
         startService(updateService);
     }
 
@@ -73,14 +81,15 @@ public class WidgetSwitchLinkService extends IntentService{
     }
 
     /***
-     * Tries to get the current link name.
-     * @return Name as String or empty String.
+     * Tries to get the name of the current link.
+     * @param id Id of the widget.
+     * @return Name of the link.
      */
-    private String getCurrentLinkName() {
+    private String getCurrentLinkName(int id) {
         String currentLinkName = "";
         try {
-            currentLinkName = CurrentLink.getCurrentLinkName(getApplicationContext());
-        } catch (IOException | ClassNotFoundException e) {
+            currentLinkName = WidgetIO.getCurrentLinkNameOfSwitchWidgetById(getApplicationContext(), id);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return currentLinkName;
@@ -95,7 +104,7 @@ public class WidgetSwitchLinkService extends IntentService{
     private ArrayList<Link> getLinkList() {
         try {
             return LinkListIO.loadLinklist(getApplicationContext());
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

@@ -20,10 +20,12 @@ public class ViewImageActivity extends Activity {
 
         ImageView iv = (ImageView) findViewById(R.id.viewimage_iv);
 
+        int id = getIntent().getIntExtra("id", 0);
+
         // load image from internal storage into iv
         Picasso picasso = Picasso.with(this);
         picasso.setLoggingEnabled(true);
-        File file = new File(this.getFilesDir() + "/" + Vars.IMAGE_FILENAME);
+        File file = new File(this.getFilesDir() + "/" + id + "/" + Vars.IMAGE_FILENAME);
         picasso.invalidate(file);
         picasso.load(file).into(iv);
 

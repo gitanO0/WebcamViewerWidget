@@ -38,4 +38,5 @@
     <string name="activated">Activated</string>
     <string name="edit">Edit</string>
     <string name="ready_with_editing">Ready</string>
+    <string name="switch_widget">Switch Widget</string>
 </resources>
