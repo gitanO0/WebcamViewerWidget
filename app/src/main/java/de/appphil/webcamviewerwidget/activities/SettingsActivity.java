@@ -1,10 +1,12 @@
 package de.appphil.webcamviewerwidget.activities;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -19,7 +21,7 @@ import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.utils.PendingIntents;
 import de.appphil.webcamviewerwidget.utils.Vars;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends AppCompatActivity {
 
     /***
      * Checkbox to select if the widget should automatically update the image.
@@ -47,6 +49,16 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        // update toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getResources().getString(R.string.settings));
+        setSupportActionBar(toolbar);
+
+        // shadow for toolbar
+        if(Build.VERSION.SDK_INT >= 21) {
+            toolbar.setElevation(25);
+        }
 
         autoUpdateWidgetLayout = (RelativeLayout) findViewById(R.id.settings_auto_update_widget_layout);
 

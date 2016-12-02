@@ -1,17 +1,18 @@
 package de.appphil.webcamviewerwidget.activities;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.R;
@@ -19,7 +20,7 @@ import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.utils.CheckBoxListViewAdapter;
 
-public class ExportActivity extends Activity {
+public class ExportActivity extends AppCompatActivity {
 
     /***
      * ListView with the names of the links.
@@ -40,6 +41,16 @@ public class ExportActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
+
+        // update toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getResources().getString(R.string.export_links));
+        setSupportActionBar(toolbar);
+
+        // shadow for toolbar
+        if(Build.VERSION.SDK_INT >= 21) {
+            toolbar.setElevation(25);
+        }
 
         lv = (ListView) findViewById(R.id.export_lv);
 
