@@ -90,7 +90,7 @@ public class WidgetUpdateService extends IntentService {
             bitmap = picasso.load(currentLink).get();
         } catch (IOException e) {
             info = getResources().getString(R.string.download_failed);
-            updateWidgetInfoText(info);
+            updateWidgetInfoText(info, id);
             e.printStackTrace();
         }
 
@@ -107,7 +107,7 @@ public class WidgetUpdateService extends IntentService {
             out.close();
         } catch(Exception e){
             info = getResources().getString(R.string.loading_failed);
-            updateWidgetInfoText(info);
+            updateWidgetInfoText(info, id);
             e.printStackTrace();
         }
 
@@ -127,13 +127,13 @@ public class WidgetUpdateService extends IntentService {
     /***
      * Changes the info text in the widget.
      * @param text Text that should be shown.
+     * @param id Id of the widget.
      */
-    private void updateWidgetInfoText(String text) {
+    private void updateWidgetInfoText(String text, int id) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
-        ComponentName thisWidget = new ComponentName(getApplication(), SwitchWidgetProvider.class);
         remoteViews.setTextViewText(R.id.widget_wv_tv_info, text);
-        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+        appWidgetManager.updateAppWidget(id, remoteViews);
     }
 
     /***
