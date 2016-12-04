@@ -18,9 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.appphil.webcamviewerwidget.R;
-import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.widgets.WidgetIO;
-import de.appphil.webcamviewerwidget.widgets.switchwidget.SwitchWidgetProvider;
 import de.appphil.webcamviewerwidget.utils.Vars;
 
 public class WidgetUpdateService extends IntentService {

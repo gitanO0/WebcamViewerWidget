@@ -27,26 +27,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/or"
-        android:id="@+id/dialog_editlink_tv_or"
-        android:gravity="center_vertical"
-        android:layout_below="@+id/dialog_editlink_btn_save"
-        android:layout_toStartOf="@+id/dialog_editlink_tv_title"
-        android:layout_alignBottom="@+id/dialog_editlink_btn_delete" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/delete"
-        android:id="@+id/dialog_editlink_btn_delete"
-        android:layout_below="@+id/dialog_editlink_btn_save"
-        android:layout_centerHorizontal="true" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

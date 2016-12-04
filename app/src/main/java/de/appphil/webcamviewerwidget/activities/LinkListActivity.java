@@ -9,23 +9,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
+import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListAdapter;
 import de.appphil.webcamviewerwidget.link.LinkListEditAdapter;
-import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.link.RVEditOnItemClickListener;
 import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
@@ -53,11 +50,6 @@ public class LinkListActivity extends AppCompatActivity {
     private boolean editing = false;
 
     /***
-     * Allows drag and drop to swap linklist items.
-     */
-    private ItemTouchHelper itemTouchHelper;
-
-    /***
      * Toolbar.
      */
     private Toolbar toolbar;
@@ -66,6 +58,11 @@ public class LinkListActivity extends AppCompatActivity {
      * Menu.
      */
     private Menu menu;
+
+    /***
+     * Database manager for links.
+     */
+    private LinkDbManager linkDbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +78,7 @@ public class LinkListActivity extends AppCompatActivity {
             toolbar.setElevation(25);
         }
 
+        linkDbManager = new LinkDbManager(this);
 
         // recyclerview to show the list
         rv = (RecyclerView) findViewById(R.id.linklist_rv);
@@ -94,13 +92,6 @@ public class LinkListActivity extends AppCompatActivity {
                 showAddLinkDialog();
             }
         });
-
-        // load linklist
-        try {
-            linklist = LinkListIO.loadLinklist(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         updateRecyclerView();
     }
@@ -131,37 +122,6 @@ public class LinkListActivity extends AppCompatActivity {
                     });
                     rv.setAdapter(adapter);
 
-                    // allow drag and drop to swap list items
-                    ItemTouchHelper.Callback itemTouchHelperCallback = new ItemTouchHelper.Callback() {
-                        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                            // get viewHolders and targets positions in adapter and then swap them
-                            Collections.swap(linklist, viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                            adapter.updateLinklist(linklist);
-                            // notify the adapter that the order switched
-                            adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                            // save linklist
-                            try {
-                                LinkListIO.saveLinklist(getApplicationContext(), linklist);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            return true;
-                        }
-
-                        @Override
-                        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {}
-
-                        @Override
-                        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                            return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
-                                    ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END);
-                        }
-                    };
-
-                    // Create ItemTouchHelper and attach it to the recyclerview
-                    itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
-                    itemTouchHelper.attachToRecyclerView(rv);
-
                     editing = true;
                     item.setTitle(getResources().getString(R.string.ready_with_editing));
                 } else {
@@ -189,6 +149,9 @@ public class LinkListActivity extends AppCompatActivity {
      * Puts the link names of the linklist hashmap in the listview.
      */
     private void updateRecyclerView() {
+        // load links from database
+        linklist = linkDbManager.getAllLinks();
+
         if(linklist.isEmpty()) return;
 
         LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
@@ -203,11 +166,6 @@ public class LinkListActivity extends AppCompatActivity {
 
         if(menu != null) {
             menu.findItem(R.id.menu_linklist_edit).setTitle(getResources().getString(R.string.edit));
-        }
-
-        // item swapping should not be working anymore
-        if(itemTouchHelper != null) {
-            itemTouchHelper.attachToRecyclerView(null);
         }
     }
 
@@ -272,30 +230,14 @@ public class LinkListActivity extends AppCompatActivity {
                 // get name and link
                 String name = etName.getText().toString();
                 String linkString = etLink.getText().toString();
+                // get id of link in database table
+                long id = linkDbManager.getIdByName(link.getName());
                 // update linklist
-                linklist.set(getItemPosition(link), new Link(name, linkString, link.isEnabled()));
-                // save linklist
-                try {
-                    LinkListIO.saveLinklist(getApplicationContext(), linklist);
-                    // update listview
-                    updateRecyclerView();
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.edit_failed), Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
+                linkDbManager.updateLinkById(id, name, linkString);
+                // update listview
+                updateRecyclerView();
                 // dismiss the dialog
                 dialog.dismiss();
-            }
-        });
-
-        Button btnDelete = (Button) dialog.findViewById(R.id.dialog_editlink_btn_delete);
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // dismiss dialog
-                dialog.dismiss();
-                // show dialog and ask if the user really wants to delete the link
-                showDeleteLinkDialog(link);
             }
         });
 
@@ -323,19 +265,12 @@ public class LinkListActivity extends AppCompatActivity {
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // remove from array list
-                linklist.remove(getItemPosition(link));
-
-                // save linklist to file
-                try {
-                    LinkListIO.saveLinklist(getApplicationContext(), linklist);
-                    // update listview
-                    updateRecyclerView();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    // show information to user
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.failed_to_delete_link), Toast.LENGTH_LONG).show();
-                }
+                // get id from the link in database table
+                long id = linkDbManager.getIdByName(link.getName());
+                // remove from database table
+                linkDbManager.deleteLinkById(id);
+                // update listview
+                updateRecyclerView();
 
                 // dismiss the dialog
                 dialog.dismiss();
@@ -343,20 +278,6 @@ public class LinkListActivity extends AppCompatActivity {
         });
 
         dialog.show();
-    }
-
-    /***
-     * Returns the position of the given link in the linklist.
-     * @param link Link object where the position is searched.
-     * @return Position of the given link object in the linklist.
-     */
-    private int getItemPosition(Link link) {
-        for(int i = 0; i < linklist.size(); i++) {
-            if(linklist.get(i) == link) {
-                return i;
-            }
-        }
-        return -1; // Fail
     }
 
     /***
@@ -393,20 +314,11 @@ public class LinkListActivity extends AppCompatActivity {
                     return;
                 }
 
-                // add new Link objects to linklist
-                linklist.add(new Link(name, link, true));
+                // add new Link objects to link database table
+                linkDbManager.addLink(name, link);
 
-                // try to save linklist
-                try {
-                    LinkListIO.saveLinklist(getApplicationContext(), linklist);
-
-                    // update listview
-                    updateRecyclerView();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    // show information to user
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.failed_to_add_link), Toast.LENGTH_LONG).show();
-                }
+                // update listview
+                updateRecyclerView();
 
                 // dismiss the dialog
                 dialog.dismiss();

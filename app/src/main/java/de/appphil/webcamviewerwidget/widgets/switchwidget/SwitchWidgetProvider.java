@@ -10,13 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.link.Link;
-import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.widgets.WidgetIO;
 import de.appphil.webcamviewerwidget.widgets.switchwidget.services.WidgetSwitchLinkService;
 import de.appphil.webcamviewerwidget.widgets.switchwidget.services.WidgetUpdateService;

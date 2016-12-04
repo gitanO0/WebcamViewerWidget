@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.R;
+import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.utils.CheckBoxListViewAdapter;
@@ -37,10 +38,17 @@ public class ExportActivity extends AppCompatActivity {
      */
     private Button btnExport;
 
+    /***
+     * Manager for the link database.
+     */
+    private LinkDbManager linkDbManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
+
+        linkDbManager = new LinkDbManager(this);
 
         // update toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -55,12 +63,7 @@ public class ExportActivity extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.export_lv);
 
         // get the linklist
-        ArrayList<Link> linklist = new ArrayList<>();
-        try {
-            linklist = LinkListIO.loadLinklist(getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ArrayList<Link> linklist = linkDbManager.getAllLinks();
 
         // create and set custom listview adapter to listview
         adapter = new CheckBoxListViewAdapter(this, R.layout.checkbox_listview_item, linklist);

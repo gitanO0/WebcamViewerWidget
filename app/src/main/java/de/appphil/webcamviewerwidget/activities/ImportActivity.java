@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
@@ -28,10 +29,17 @@ public class ImportActivity extends AppCompatActivity {
      */
     private EditText et;
 
+    /***
+     * Manager for link database.
+     */
+    private LinkDbManager linkDbManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_import);
+
+        linkDbManager = new LinkDbManager(this);
 
         // update toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -75,7 +83,7 @@ public class ImportActivity extends AppCompatActivity {
             for (String part : parts) {
                 part = part.replace("{", "");
                 String[] content = part.split(";");
-                importedLinks.add(new Link(content[0], content[1], true));
+                importedLinks.add(new Link(0, content[0], content[1], true));
                 System.out.println("Name: " + content[0] + " Link: " + content[1]);
             }
         } catch(ArrayIndexOutOfBoundsException e) {
@@ -85,18 +93,12 @@ public class ImportActivity extends AppCompatActivity {
 
         if(importedLinks.isEmpty()) return;
 
-        try {
-            ArrayList<Link> linklist = LinkListIO.loadLinklist(getApplicationContext());
-            linklist.addAll(importedLinks);
-            LinkListIO.saveLinklist(getApplicationContext(), linklist);
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.import_completed), Toast.LENGTH_LONG).show();
-            finish();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            showImportFailedToast();
-        } catch (Exception e) {
-            e.printStackTrace();
+        for(Link link : importedLinks) {
+            linkDbManager.addLink(link.getName(), link.getLink());
         }
+
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.import_completed), Toast.LENGTH_LONG).show();
+        finish();
     }
 
     /***
