@@ -75,7 +75,7 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
                     System.out.println("Switch widget is not saved yet.");
                     // this widget needs to be saved
                     // get a link to set as current link
-                    String linkName = getEnabledLinkNameToSetAsCurrentLink(context);
+                    String linkName = getEnabledLinkNameToSetAsCurrentLink(context, appWidgetId);
                     if(linkName.isEmpty()) return;
                     System.out.println("Link name: " + linkName);
                     WidgetIO.addSwitchWidgetSave(context, new SwitchWidgetSave(appWidgetId, linkName, false, 0));
@@ -146,11 +146,12 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
      * Needed when a widget gets added to get a link to set as first current link.
      * Returns empty string when there's no enabled link.
      * @param context
+     * @param id Id of the widget.
      * @return
      */
-    private String getEnabledLinkNameToSetAsCurrentLink(Context context) {
+    private String getEnabledLinkNameToSetAsCurrentLink(Context context, int id) {
         // check if user added a link to the list yet
-        if(LinkListIO.linklistFileExists(context)) {
+        if(LinkListIO.linklistFileExists(context, id)) {
             try {
                 ArrayList<Link> linklist = LinkListIO.loadLinklist(context);
                 for(Link link : linklist) {

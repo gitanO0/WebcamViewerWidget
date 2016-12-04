@@ -150,7 +150,7 @@ public class WidgetUpdateService extends IntentService {
         if(currentLinkName.isEmpty()) return currentLinkName;
 
         // get the link by the name and return it
-        return LinkListIO.getLinkByName(getApplicationContext(), currentLinkName);
+        return LinkListIO.getLinkByName(getApplicationContext(), currentLinkName, id);
     }
 
     /***
