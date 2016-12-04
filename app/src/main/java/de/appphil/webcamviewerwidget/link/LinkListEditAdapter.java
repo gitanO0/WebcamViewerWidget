@@ -27,13 +27,8 @@ public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapte
             this.ivDelete = (ImageView) view.findViewById(R.id.linklist_item_iv_delete);
         }
 
-        public void bind(Context context, final Link link, final RVEditOnItemClickListener listener) {
+        public void bind(final Link link, final RVEditOnItemClickListener listener) {
             tv.setText(link.getName());
-            if(link.isEnabled()) {
-                tv.setTextColor(context.getResources().getColor(R.color.enabled_text));
-            } else {
-                tv.setTextColor(context.getResources().getColor(R.color.disabled_text));
-            }
 
             ivEdit.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
@@ -83,7 +78,7 @@ public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(context, linklist.get(position), listener);
+        holder.bind(linklist.get(position), listener);
     }
 
     @Override

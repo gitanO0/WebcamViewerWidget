@@ -2,7 +2,6 @@ package de.appphil.webcamviewerwidget.activities;
 
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,10 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -33,7 +29,6 @@ import de.appphil.webcamviewerwidget.link.LinkListIO;
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.link.RVEditOnItemClickListener;
 import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
-import de.appphil.webcamviewerwidget.widgets.WidgetIO;
 
 public class LinkListActivity extends AppCompatActivity {
 
@@ -261,9 +256,6 @@ public class LinkListActivity extends AppCompatActivity {
         final EditText etLink = (EditText) dialog.findViewById(R.id.dialog_editlink_et_link);
         etLink.setText(link.getLink());
 
-        final CheckBox cbActivated = (CheckBox) dialog.findViewById(R.id.dialog_editlink_cb_activated);
-        cbActivated.setChecked(link.isEnabled());
-
         Button btnCancel = (Button) dialog.findViewById(R.id.dialog_editlink_btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,10 +272,8 @@ public class LinkListActivity extends AppCompatActivity {
                 // get name and link
                 String name = etName.getText().toString();
                 String linkString = etLink.getText().toString();
-                // check if link should be activated
-                boolean activated = cbActivated.isChecked();
                 // update linklist
-                linklist.set(getItemPosition(link), new Link(name, linkString, activated));
+                linklist.set(getItemPosition(link), new Link(name, linkString, link.isEnabled()));
                 // save linklist
                 try {
                     LinkListIO.saveLinklist(getApplicationContext(), linklist);
