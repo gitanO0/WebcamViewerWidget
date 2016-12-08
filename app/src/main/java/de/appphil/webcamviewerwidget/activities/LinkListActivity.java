@@ -128,15 +128,6 @@ public class LinkListActivity extends AppCompatActivity {
                     updateRecyclerView();
                 }
                 return true;
-            case R.id.menu_linklist_export:
-                startExportActivity();
-                return true;
-            case R.id.menu_linklist_import:
-                startImportActivity();
-                return true;
-            case R.id.menu_linklist_settings:
-                startSettingsActivity();
-                return true;
             case R.id.menu_linklist_info:
                 startInfoActivity();
                 return true;
@@ -152,7 +143,14 @@ public class LinkListActivity extends AppCompatActivity {
         // load links from database
         linklist = linkDbManager.getAllLinks();
 
-        if(linklist.isEmpty()) return;
+        if(linklist.isEmpty()) {
+            System.out.println("Linklist from db is empty.");
+        } else {
+            System.out.println("Linklist:");
+            for(Link link : linklist) {
+                System.out.println(link.getId() + " " + link.getName() + " " + link.getLink());
+            }
+        }
 
         LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
             @Override
@@ -170,34 +168,10 @@ public class LinkListActivity extends AppCompatActivity {
     }
 
     /***
-     * Starts the SettingsActivity.
-     */
-    private void startSettingsActivity() {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
-    }
-
-    /***
      * Starts the InfoActivity.
      */
     private void startInfoActivity() {
         Intent intent = new Intent(this, InfoActivity.class);
-        startActivity(intent);
-    }
-
-    /***
-     * Starts the ExportActivity.
-     */
-    private void startExportActivity() {
-        Intent intent = new Intent(this, ExportActivity.class);
-        startActivity(intent);
-    }
-
-    /***
-     * Starts the ImportActivity.
-     */
-    private void startImportActivity() {
-        Intent intent = new Intent(this, ImportActivity.class);
         startActivity(intent);
     }
 
@@ -307,12 +281,7 @@ public class LinkListActivity extends AppCompatActivity {
                 String name = etName.getText().toString();
                 String link = etLink.getText().toString();
 
-                // name can't contain ":"
-                if(name.contains(":")) {
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.name_cant_contain) + " :", Toast.LENGTH_LONG).show();
-                    dialog.dismiss();
-                    return;
-                }
+                System.out.println("User input: " + name + " " + link);
 
                 // add new Link objects to link database table
                 linkDbManager.addLink(name, link);

@@ -24,6 +24,6 @@ public final class LinkReaderContract {
     public static class SwitchWidgetEntry implements BaseColumns {
         public static final String TABLE_NAME = "switch_widgets";
         public static final String COLUMN_NAME_WIDGET_ID = "widget_id";
-        public static final String COLUMN_NAME_CURRENT_LINK_ID = "current_link_id";
+        public static final String COLUMN_NAME_CURRENT_LINK_POS = "current_link_pos";
     }
 }

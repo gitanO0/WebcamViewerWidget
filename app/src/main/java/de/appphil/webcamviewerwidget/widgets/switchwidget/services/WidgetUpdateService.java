@@ -18,7 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.appphil.webcamviewerwidget.R;
-import de.appphil.webcamviewerwidget.widgets.WidgetIO;
+import de.appphil.webcamviewerwidget.db.LinkDbManager;
+import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.utils.Vars;
 
 public class WidgetUpdateService extends IntentService {
@@ -36,56 +37,22 @@ public class WidgetUpdateService extends IntentService {
         int id = intent.getIntExtra("id", 0);
         System.out.println("Updating widget with id: " + id);
 
-        // check if there's an internet connection
-        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
-        if(isConnected) {
-            // check if update was sent by an alarm
-            if(intent.hasExtra("sentByAlarm")) {
-                // check if widget should only be updated with wifi connection
-                SharedPreferences sharedPref = this.getSharedPreferences(Vars.PREFS, Context.MODE_PRIVATE);
-                boolean onlyUpdateWithWifi = sharedPref.getBoolean(Vars.ONLY_UPDATE_WITH_WIFI, true);
-                if(onlyUpdateWithWifi) {
-                    // check if wifi is connected
-                    boolean isWifi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
-                    if(isWifi) {
-                        // update
-                    } else {
-                        // don't update
-                        System.out.println("WidgetUpdateService: Not updated widget because it should only update automatically with a wifi connection and there's none now.");
-                        return;
-                    }
-                }
-            } else {
-                System.out.println("WidgetUpdateService: intent has't got sentByAlarm intent.");
-                // update sent by user clicking on "reload" button so also update without wifi
-            }
-            boolean isWifi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
-            if(isWifi) {
-                // can update
-            } else {
-
-            }
-        } else {
-            System.out.println("WidgetUpdateService: Not updated widget because there's no internet connection available.");
-            return;
-        }
+        LinkDbManager linkDbManager = new LinkDbManager(this);
 
         // get the current link
-        String currentLink = getCurrentLink(id);
-        if(currentLink.isEmpty()) return;
+        Link currentLink = linkDbManager.getCurrentLinkBySwitchWidget(id);
+        if(currentLink == null) return;
+        String currentLinkLink = currentLink.getLink();
+        if(currentLinkLink.isEmpty()) return;
 
-        System.out.println("Current Link is: " + currentLink);
+        System.out.println("Current Link is: " + currentLinkLink);
 
         // download image from link and save it to internal storage
         Picasso picasso = Picasso.with(getApplicationContext());
         picasso.setLoggingEnabled(true);
         Bitmap bitmap = null;
         try {
-            bitmap = picasso.load(currentLink).get();
+            bitmap = picasso.load(currentLinkLink).get();
         } catch (IOException e) {
             info = getResources().getString(R.string.download_failed);
             updateWidgetInfoText(info, id);
@@ -110,7 +77,7 @@ public class WidgetUpdateService extends IntentService {
         }
 
         if(info == null) {
-            info = getCurrentLinkName(id) + ":";
+            info = currentLink.getName() + ":";
         }
 
         // update widget
@@ -134,36 +101,4 @@ public class WidgetUpdateService extends IntentService {
         appWidgetManager.updateAppWidget(id, remoteViews);
     }
 
-    /***
-     * Tries to get the current link.
-     * If there's a current link then it returns that one.
-     * If there's no current link saved it returns an empty string.
-     * @param id  Id of the widget.
-     * @return String with link or empty when there's no current link saved.
-     */
-    private String getCurrentLink(int id) {
-        // get current link name
-        String currentLinkName = getCurrentLinkName(id);
-
-        if(currentLinkName.isEmpty()) return currentLinkName;
-
-        // get the link by the name and return it
-        return LinkListIO.getLinkByName(getApplicationContext(), currentLinkName, id);
-    }
-
-    /***
-     * Tries to get the current link name.
-     * If there's no current link saved it returns an empty string.
-     * @param id Id of the widget.
-     * @return Name of the current link as string.
-     */
-    private String getCurrentLinkName(int id) {
-        String currentLinkName = "";
-        try {
-            currentLinkName = WidgetIO.getCurrentLinkNameOfSwitchWidgetById(getApplicationContext(), id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return currentLinkName;
-    }
 }

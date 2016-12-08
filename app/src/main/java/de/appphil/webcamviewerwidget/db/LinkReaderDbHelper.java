@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class LinkReaderDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Link.db";
+    public static final String DATABASE_NAME = "LinkDB1.db";
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
@@ -20,15 +20,15 @@ public class LinkReaderDbHelper extends SQLiteOpenHelper {
                     LinkReaderContract.LinkEntry.COLUMN_NAME_LINK + TEXT_TYPE + " )";
 
     private static final String SQL_CREATE_ENTRIES_2 =
-            "CREATE TABLE " + LinkReaderContract.WidgetLinksEntry.TABLE_NAME + " (" +
-                    LinkReaderContract.WidgetLinksEntry.COLUMN_NAME_SWITCH_WIDGET_ID + INTEGER_TYPE + COMMA_SEP +
-                    LinkReaderContract.WidgetLinksEntry.COLUMN_NAME_LINK_ID + INTEGER_TYPE + COMMA_SEP +
-                    LinkReaderContract.WidgetLinksEntry.COLUMN_NAME_POS + INTEGER_TYPE + " )";
+            "CREATE TABLE " + LinkReaderContract.SwitchWidgetLinksEntry.TABLE_NAME + " (" +
+                    LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_SWITCH_WIDGET_ID + INTEGER_TYPE + COMMA_SEP +
+                    LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_LINK_ID + INTEGER_TYPE + COMMA_SEP +
+                    LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_POS + INTEGER_TYPE + " )";
 
     private static final String SQL_CREATE_ENTRIES_3 =
             "CREATE TABLE " + LinkReaderContract.SwitchWidgetEntry.TABLE_NAME + " (" +
                     LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_WIDGET_ID + INTEGER_TYPE + COMMA_SEP +
-                    LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_CURRENT_LINK_ID + INTEGER_TYPE + " )";
+                    LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_CURRENT_LINK_POS + INTEGER_TYPE + " )";
 
     public LinkReaderDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

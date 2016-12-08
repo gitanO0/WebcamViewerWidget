@@ -30,6 +30,7 @@ public class LinkDbManager {
      * @param link
      */
     public void addLink(String name, String link) {
+        System.out.println("addLink in LinkDbManager got name: " + name + " and link: " + link);
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -40,6 +41,7 @@ public class LinkDbManager {
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(LinkReaderContract.LinkEntry.TABLE_NAME, null, values);
+        System.out.println("This link gets the id: " + newRowId);
 
         db.close();
     }
@@ -67,13 +69,14 @@ public class LinkDbManager {
         ArrayList<Link> allLinks = new ArrayList<>();
 
         cursor.moveToFirst();
-        while(cursor.moveToNext()) {
+        for(int i = 0; i < cursor.getCount(); i++) {
             long itemId = cursor.getLong(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry._ID));
             String itemName = cursor.getString(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry.COLUMN_NAME_NAME));
             String itemLink = cursor.getString(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry.COLUMN_NAME_LINK));
-
+            System.out.println("Found link with id: " + itemId + " name: " + itemName + " link: " + itemLink);
             // add to allLinks list
             allLinks.add(new Link(itemId, itemName, itemLink));
+            cursor.moveToNext();
         }
         cursor.close();
 
@@ -105,6 +108,8 @@ public class LinkDbManager {
                 null,                                     // don't filter by row groups
                 sortOrder                                 // The sort order
         );
+
+        if(cursor.getCount() == 0) return null;
 
         cursor.moveToFirst();
 
@@ -194,73 +199,44 @@ public class LinkDbManager {
         db.close();
     }
 
-    /***
-     * Gets all links from the switch widget linklist with the given widget id.
-     * @param switchWidgetId
-     * @return ArrayList containing Link objects.
-     */
-    public ArrayList<Link> getLinksBySwitchWidgetId(int switchWidgetId) {
+
+    public ArrayList<SwitchWidgetLinksRow> getSwitchWidgetLinksRowsByWidgetId(int switchWidgetId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        // How you want the results sorted in the resulting Cursor
-        String sortOrder = LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_SWITCH_WIDGET_ID + " ASC";
-
-        String[] linkIdProjection = {
-                LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_LINK_ID
+        String[] projection = {
+                LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_SWITCH_WIDGET_ID,
+                LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_LINK_ID,
+                LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_POS
         };
 
+        // Filter results
+        String selection = LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_SWITCH_WIDGET_ID + " =?";
+        String[] selectionArgs = { "" + switchWidgetId };
+
         Cursor cursor = db.query(
-                LinkReaderContract.SwitchWidgetLinksEntry.TABLE_NAME,// The table to query
-                linkIdProjection,                         // The columns to return
-                null,                                     // The columns for the WHERE clause
-                null,                                     // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortOrder                                 // The sort order
-        );
-
-        ArrayList<String> allLinkIds = new ArrayList<>();
-
-        cursor.moveToFirst();
-        while(cursor.moveToNext()) {
-            int linkId = cursor.getInt(cursor.getColumnIndexOrThrow(LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_LINK_ID));
-
-            // add to allLinkIds list
-            allLinkIds.add("" + linkId);
-        }
-        cursor.close();
-
-        // get the link objects from the id's
-        // Filter results WHERE "id" = id
-        String selection = LinkReaderContract.LinkEntry._ID + " = ?";
-        String[] selectionArgs = (String[])allLinkIds.toArray();
-
-        // How you want the results sorted in the resulting Cursor
-        String sortOrder2 = LinkReaderContract.LinkEntry.COLUMN_NAME_NAME + " ASC";
-
-        Cursor cursor2 = db.query(
-                LinkReaderContract.LinkEntry.TABLE_NAME,  // The table to query
-                fullLinkProjection,                       // The columns to return
+                LinkReaderContract.SwitchWidgetLinksEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
                 selection,                                // The columns for the WHERE clause
                 selectionArgs,                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
-                sortOrder                                 // The sort order
+                null                                      // The sort order
         );
 
-        ArrayList<Link> links = new ArrayList<>();
+        cursor.moveToFirst();
+        ArrayList<SwitchWidgetLinksRow> rows = new ArrayList<>();
+        if(cursor.getCount() == 0) return rows;
 
-        cursor2.moveToFirst();
-        while(cursor2.moveToNext()) {
-            long itemId = cursor2.getLong(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry._ID));
-            String itemName = cursor2.getString(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry.COLUMN_NAME_NAME));
-            String itemLink = cursor2.getString(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry.COLUMN_NAME_LINK));
-            links.add(new Link(itemId, itemName, itemLink));
+        for(int i = 0; i < cursor.getCount(); i++) {
+            int linkId = cursor.getInt(cursor.getColumnIndexOrThrow(LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_LINK_ID));
+            int pos = cursor.getInt(cursor.getColumnIndexOrThrow(LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_POS));
+            rows.add(new SwitchWidgetLinksRow(switchWidgetId, linkId, pos));
+            cursor.moveToNext();
         }
-        cursor2.close();
 
+        cursor.close();
         db.close();
-        return links;
+        return rows;
     }
 
     /***
@@ -314,6 +290,7 @@ public class LinkDbManager {
         );
 
         int countOfLinks = cursor.getCount();
+        cursor.close();
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -326,5 +303,188 @@ public class LinkDbManager {
 
         db.close();
     }
+
+    public void deleteLinkFromSwitchWidgetLinklist(int switchWidgetId, int linkId) {
+        // get all links from the switch widget linklist
+        ArrayList<SwitchWidgetLinksRow> rowsBeforeDelete = getSwitchWidgetLinksRowsByWidgetId(switchWidgetId);
+        // remove all the rows from the db table
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Define 'where' part of query.
+        String selection = LinkReaderContract.SwitchWidgetLinksEntry.COLUMN_NAME_SWITCH_WIDGET_ID + " =?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { "" + switchWidgetId };
+        // Issue SQL statement.
+        db.delete(LinkReaderContract.SwitchWidgetLinksEntry.TABLE_NAME, selection, selectionArgs);
+
+        db.close();
+        // now remove the link with the given linkId from the arraylist
+        ArrayList<SwitchWidgetLinksRow> rowsAfterDelete = new ArrayList<>();
+        int posOfDeletedLink = 1;
+        for(SwitchWidgetLinksRow row : rowsBeforeDelete) {
+            if(row.getLinkId() != linkId) {
+                rowsAfterDelete.add(row);
+            } else {
+                posOfDeletedLink = row.getPos();
+            }
+        }
+        if(posOfDeletedLink == rowsBeforeDelete.size()) {
+            // no position have to be changed
+        } else {
+            // now there's a problem because the position of the deleted link is missing in the list
+            for(SwitchWidgetLinksRow row : rowsAfterDelete) {
+                if(row.getPos() > posOfDeletedLink) {
+                    row.setPos(row.getPos()-1);
+                }
+            }
+        }
+        // add the links to the database table again
+        for(SwitchWidgetLinksRow row : rowsAfterDelete) {
+            addLinkToSwitchWidgetLinklist(switchWidgetId, row.getLinkId(), row.getPos());
+        }
+    }
+
+    /***
+     * Updates the position value of the current link in the SwitchWidget table.
+     * @param switchWidgetId
+     * @param position
+     */
+    public void updateSwitchWidgetCurrentLinkPosition(int switchWidgetId, int position) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Define 'where' part of query.
+        String selection = LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_WIDGET_ID + " =?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { "" + switchWidgetId };
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_WIDGET_ID, switchWidgetId);
+        values.put(LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_CURRENT_LINK_POS, position);
+
+        db.update(LinkReaderContract.SwitchWidgetEntry.TABLE_NAME, values, selection, selectionArgs);
+        db.close();
+    }
+
+    /***
+     * Tries to get the current link position.
+     * If there are no widget entries it returns -1.
+     * Tries to set a link to current if there's one.
+     * @param switchWidgetId
+     * @return
+     */
+    public int getSwitchWidgetCurrentLinkPosition(int switchWidgetId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_CURRENT_LINK_POS
+        };
+
+        // Filter results
+        String selection = LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_WIDGET_ID + " =?";
+        String[] selectionArgs = { "" + switchWidgetId };
+
+        Cursor cursor = db.query(
+                LinkReaderContract.SwitchWidgetEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                      // The sort order
+        );
+
+        if(cursor.getCount() == 0) return -1;
+        cursor.moveToFirst();
+        int currentLinkPos = cursor.getInt(cursor.getColumnIndexOrThrow(LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_CURRENT_LINK_POS));
+        cursor.close();
+        db.close();
+
+        if(currentLinkPos == -1) {
+            // check if there are some links in the widgets linklist
+            ArrayList<SwitchWidgetLinksRow> rows = getSwitchWidgetLinksRowsByWidgetId(switchWidgetId);
+            if (!rows.isEmpty()) {
+                // set link with pos 1 to current
+                updateSwitchWidgetCurrentLinkPosition(switchWidgetId, 1);
+                return 1;
+            }
+        }
+        return currentLinkPos;
+    }
+
+    public Link getCurrentLinkBySwitchWidget(int switchWidgetId) {
+        int currentLinkPosition = getSwitchWidgetCurrentLinkPosition(switchWidgetId);
+        System.out.println("CurrentLinkPosition: " + currentLinkPosition);
+        if(currentLinkPosition == -1) {
+            // there is no link
+            return null;
+        }
+        ArrayList<SwitchWidgetLinksRow> rows = getSwitchWidgetLinksRowsByWidgetId(switchWidgetId);
+        int linkId = 0;
+        for(SwitchWidgetLinksRow row : rows) {
+            System.out.println("Row: " + row.getSwitchWidgetId() + " " + row.getLinkId() + " " + row.getPos());
+            if(row.getPos() == currentLinkPosition) {
+                linkId = row.getLinkId();
+                System.out.println("LinkId is: " + linkId);
+                break;
+            }
+        }
+        // get link by linkId
+        return getLinkById(linkId);
+    }
+
+    public boolean isSwitchWidgetSaved(int switchWidgetId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_WIDGET_ID
+        };
+
+        // Filter results
+        String selection = LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_WIDGET_ID + " =?";
+        String[] selectionArgs = { "" + switchWidgetId };
+
+        Cursor cursor = db.query(
+                LinkReaderContract.SwitchWidgetEntry.TABLE_NAME,  // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                      // The sort order
+        );
+
+        if(cursor.getCount() == 0) return false;
+        return true;
+    }
+
+    public void deleteSwitchWidget(int switchWidgetId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Define 'where' part of query.
+        String selection = LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_WIDGET_ID + " =?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { "" + switchWidgetId };
+        // Issue SQL statement.
+        db.delete(LinkReaderContract.SwitchWidgetEntry.TABLE_NAME, selection, selectionArgs);
+
+        db.close();
+    }
+
+    public void addSwitchWidget(int widgetId, int currentLinkPos) {
+        // Gets the data repository in write mode
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_WIDGET_ID, widgetId);
+        values.put(LinkReaderContract.SwitchWidgetEntry.COLUMN_NAME_CURRENT_LINK_POS, currentLinkPos);
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(LinkReaderContract.SwitchWidgetEntry.TABLE_NAME, null, values);
+
+        db.close();
+    }
+
 
 }
