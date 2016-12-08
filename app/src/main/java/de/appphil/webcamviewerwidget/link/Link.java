@@ -1,21 +1,20 @@
 package de.appphil.webcamviewerwidget.link;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
-@Root(name="linkobj")
 public class Link {
+
+    /***
+     * Id of the link in database.
+     */
+    private long id;
 
     /***
      * Name of the link.
      */
-    @Element(name="name")
     private String name;
 
     /***
      * Link to the image.
      */
-    @Element(name="link")
     private String link;
 
     /***
@@ -23,22 +22,25 @@ public class Link {
      */
     private boolean checked = false;
 
-    /***
-     * Needed to check if the link is enabled or disabled.
-     */
-    @Element(name="enabled")
-    private boolean enabled;
 
     /***
      * Constructor for Link.
+     * @param id Id.
      * @param name Name of the link.
      * @param link Link.
-     * @param enabled If the link is enabled or not.
      */
-    public Link(@Element(name="name")String name, @Element(name="link")String link, @Element(name="enabled")boolean enabled) {
+    public Link(long id, String name, String link) {
+        this.id = id;
         this.name = name;
         this.link = link;
-        this.enabled = enabled;
+    }
+
+    /***
+     *
+     * @return Id of the link.
+     */
+    public long getId() {
+        return id;
     }
 
     /***
@@ -71,13 +73,5 @@ public class Link {
      */
     public boolean isChecked() {
         return checked;
-    }
-
-    /***
-     * Returns if the link is enabled or not.
-     * @return If the link is enabled.
-     */
-    public boolean isEnabled() {
-        return enabled;
     }
 }

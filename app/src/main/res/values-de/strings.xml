@@ -37,4 +37,6 @@
     <string name="edit">Bearbeiten</string>
     <string name="ready_with_editing">Fertig</string>
     <string name="switch_widget">Wechsel Widget</string>
+    <string name="config">Konfiguration</string>
+    <string name="select_link">Link auswählen</string>
 </resources>

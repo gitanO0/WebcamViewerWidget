@@ -1,5 +1,4 @@
-package de.appphil.webcamviewerwidget.link;
-
+package de.appphil.webcamviewerwidget.widgets.switchwidget;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -12,29 +11,24 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.R;
+import de.appphil.webcamviewerwidget.link.Link;
+import de.appphil.webcamviewerwidget.link.RVEditOnItemClickListener;
 
-public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapter.ViewHolder> {
+public class SwitchWidgetLinksEditAdapter extends RecyclerView.Adapter<SwitchWidgetLinksEditAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tv;
-        public ImageView ivEdit;
         public ImageView ivDelete;
 
         public ViewHolder(View view) {
             super(view);
-            this.tv = (TextView) view.findViewById(R.id.linklist_item_tv);
-            this.ivEdit = (ImageView) view.findViewById(R.id.linklist_item_iv_edit);
-            this.ivDelete = (ImageView) view.findViewById(R.id.linklist_item_iv_delete);
+            this.tv = (TextView) view.findViewById(R.id.linklist_item_delete_only_tv);
+            this.ivDelete = (ImageView) view.findViewById(R.id.linklist_item_delete_only_iv_delete);
         }
 
         public void bind(final Link link, final RVEditOnItemClickListener listener) {
             tv.setText(link.getName());
 
-            ivEdit.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    listener.onItemClickEdit(link);
-                }
-            });
             ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClickDelete(link);
@@ -53,7 +47,7 @@ public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapte
 
     private RVEditOnItemClickListener listener;
 
-    public LinkListEditAdapter(Context context, ArrayList<Link> linklist, RVEditOnItemClickListener listener) {
+    public SwitchWidgetLinksEditAdapter(Context context, ArrayList<Link> linklist, RVEditOnItemClickListener listener) {
         this.context = context;
         this.linklist = linklist;
         this.listener = listener;
@@ -68,9 +62,9 @@ public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapte
     }
 
     @Override
-    public LinkListEditAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.linklist_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.linklist_item_delete_only, parent, false);
 
         ViewHolder vh = new ViewHolder(v);
         return vh;

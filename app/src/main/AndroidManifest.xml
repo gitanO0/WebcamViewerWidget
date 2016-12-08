@@ -28,10 +28,9 @@
         </receiver>
 
         <activity android:name=".activities.ViewImageActivity" />
-        <activity android:name=".activities.ImportActivity" />
-        <activity android:name=".activities.ExportActivity" />
-        <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.InfoActivity" />
+        <activity android:name=".activities.SwitchWidgetConfigActivity" />
+        <activity android:name=".activities.SelectLinkActivity" />
 
         <service
             android:name=".widgets.switchwidget.services.WidgetUpdateService"

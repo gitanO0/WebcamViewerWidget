@@ -22,13 +22,8 @@ public class LinkListAdapter extends RecyclerView.Adapter<LinkListAdapter.ViewHo
             this.tv = (TextView) view.findViewById(R.id.text1);
         }
 
-        public void bind(Context context, final Link link, final RVOnItemClickListener listener) {
+        public void bind(final Link link, final RVOnItemClickListener listener) {
             tv.setText(link.getName());
-            if(link.isEnabled()) {
-                tv.setTextColor(context.getResources().getColor(R.color.enabled_text));
-            } else {
-                tv.setTextColor(context.getResources().getColor(R.color.disabled_text));
-            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(link);
@@ -64,7 +59,7 @@ public class LinkListAdapter extends RecyclerView.Adapter<LinkListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(context, linklist.get(position), listener);
+        holder.bind(linklist.get(position), listener);
     }
 
     @Override

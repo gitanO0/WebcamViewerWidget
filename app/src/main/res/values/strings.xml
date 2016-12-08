@@ -39,4 +39,6 @@
     <string name="edit">Edit</string>
     <string name="ready_with_editing">Ready</string>
     <string name="switch_widget">Switch Widget</string>
+    <string name="config">Config</string>
+    <string name="select_link">Select link</string>
 </resources>
