@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -32,8 +33,6 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
 
     public void onUpdate(final Context context, AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         Log.d(TAG, "onUpdate called");
-
-        LinkDbManager linkDbManager = new LinkDbManager(context);
 
         // Perform this loop procedure for each App Widget that belongs to this provider
         for(int appWidgetId : appWidgetIds) {

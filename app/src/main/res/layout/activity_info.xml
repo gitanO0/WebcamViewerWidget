@@ -12,7 +12,8 @@
         android:id="@+id/info_tv_text"
         android:layout_below="@+id/toolbar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:paddingStart="10dp"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,6 +23,7 @@
         android:id="@+id/info_tv_picasso_title"
         android:layout_marginTop="37dp"
         android:layout_below="@+id/info_tv_text"
+        android:paddingStart="10dp"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -31,8 +33,9 @@
         android:text="https://github.com/square/picasso"
         android:autoLink="web"
         android:id="@+id/info_tv_picasso_link"
-        android:layout_alignTop="@+id/info_tv_picasso_title"
-        android:layout_toEndOf="@+id/info_tv_picasso_title" />
+        android:paddingStart="10dp"
+        android:layout_below="@+id/info_tv_picasso_title"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,8 +43,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="PhotoView:"
         android:id="@+id/info_tv_photoview_title"
-        android:layout_below="@+id/info_tv_picasso_title"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/info_tv_picasso_link"
+        android:layout_alignParentStart="true"
+        android:paddingStart="10dp"
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,7 +55,8 @@
         android:text="https://github.com/chrisbanes/PhotoView"
         android:autoLink="web"
         android:id="@+id/info_tv_photoview_link"
-        android:layout_below="@+id/info_tv_picasso_link"
-        android:layout_toEndOf="@+id/info_tv_photoview_title" />
+        android:layout_below="@+id/info_tv_photoview_title"
+        android:paddingStart="10dp"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

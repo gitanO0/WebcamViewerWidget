@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
@@ -34,6 +35,9 @@ public class WidgetUpdateService extends IntentService {
 
         int id = intent.getIntExtra("id", 0);
         Log.d(TAG, "Updating widget with id: " + id);
+
+        // show progress bar so that the users knows something gets loaded
+        showProgressBar(id);
 
         LinkDbManager linkDbManager = new LinkDbManager(this);
 
@@ -84,6 +88,9 @@ public class WidgetUpdateService extends IntentService {
             info = currentLink.getName() + ":";
         }
 
+        // progress bar is not needed anymore
+        hideProgressBar(id);
+
         // update widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
@@ -102,6 +109,28 @@ public class WidgetUpdateService extends IntentService {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
         remoteViews.setTextViewText(R.id.widget_wv_tv_info, text);
+        appWidgetManager.updateAppWidget(id, remoteViews);
+    }
+
+    /***
+     * Shows the progress bar.
+     * @param id
+     */
+    private void showProgressBar(int id) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
+        remoteViews.setViewVisibility(R.id.widget_wv_pb, View.VISIBLE);
+        appWidgetManager.updateAppWidget(id, remoteViews);
+    }
+
+    /***
+     * Hides the progress bar again.
+     * @param id
+     */
+    private void hideProgressBar(int id) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
+        remoteViews.setViewVisibility(R.id.widget_wv_pb, View.GONE);
         appWidgetManager.updateAppWidget(id, remoteViews);
     }
 
