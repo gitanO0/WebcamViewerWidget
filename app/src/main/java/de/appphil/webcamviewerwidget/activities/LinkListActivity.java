@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,7 +45,7 @@ public class LinkListActivity extends AppCompatActivity {
     /***
      * Button to add a link to the list.
      */
-    private Button btnAdd;
+    private FloatingActionButton btnAdd;
 
     /***
      * Wheter the user edits the list or not.
@@ -87,7 +88,7 @@ public class LinkListActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         rv.setLayoutManager(layoutManager);
 
-        btnAdd = (Button) findViewById(R.id.linklist_btn_add);
+        btnAdd = (FloatingActionButton) findViewById(R.id.linklist_btn_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

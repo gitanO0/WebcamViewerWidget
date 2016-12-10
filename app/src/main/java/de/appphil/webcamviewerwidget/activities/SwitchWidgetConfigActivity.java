@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -34,7 +34,7 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
     /***
      * Button to add a link to the list.
      */
-    private Button btnAdd;
+    private FloatingActionButton btnAdd;
 
     /***
      * View to shows the links.
@@ -73,7 +73,7 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
         appWidgetId = getIntent().getIntExtra("id", 0);
         Log.d(TAG, "Started switch widget confi activity for widget with id: " + appWidgetId);
 
-        btnAdd = (Button) findViewById(R.id.switchwidgetconfig_btn_add);
+        btnAdd = (FloatingActionButton) findViewById(R.id.switchwidgetconfig_btn_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
