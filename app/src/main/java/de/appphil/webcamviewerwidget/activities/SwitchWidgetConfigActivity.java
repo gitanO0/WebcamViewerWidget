@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.db.SwitchWidgetLinksRow;
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.link.LinkListAdapter;
-import de.appphil.webcamviewerwidget.link.LinkListEditAdapter;
 import de.appphil.webcamviewerwidget.link.RVEditOnItemClickListener;
 import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
 import de.appphil.webcamviewerwidget.widgets.switchwidget.SwitchWidgetLinksEditAdapter;

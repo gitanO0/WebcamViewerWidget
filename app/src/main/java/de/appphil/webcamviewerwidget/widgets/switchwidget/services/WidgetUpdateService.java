@@ -2,13 +2,8 @@ package de.appphil.webcamviewerwidget.widgets.switchwidget.services;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -19,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.appphil.webcamviewerwidget.R;
-import de.appphil.webcamviewerwidget.activities.SelectLinkActivity;
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.utils.Vars;
