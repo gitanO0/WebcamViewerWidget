@@ -2,34 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content" android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/widget_wv_tv_info"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="0dp"/>
-
     <ImageView
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:src="@drawable/ic_chevron_right_black_24dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/widget_wv_btn_right"
-        android:layout_below="@+id/widget_wv_tv_info"
-        android:layout_alignParentEnd="true" />
-
-    <ImageView
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_refresh_black_24dp"
-        android:id="@+id/widget_wv_btn_reload"
-        android:layout_below="@+id/widget_wv_btn_right"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/widget_wv_iv" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_wv_iv"
+        android:layout_below="@+id/widget_wv_btn_left"/>
 
     <ImageView
         style="?android:attr/buttonStyleSmall"
@@ -37,17 +14,28 @@
         android:src="@drawable/ic_chevron_left_black_24dp"
         android:id="@+id/widget_wv_btn_left"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/widget_wv_tv_info"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
 
     <ImageView
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_chevron_right_black_24dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/widget_wv_btn_right"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/widget_wv_iv"
-        android:layout_below="@+id/widget_wv_tv_info"
-        android:layout_toEndOf="@+id/widget_wv_btn_left"
-        android:layout_toStartOf="@+id/widget_wv_btn_right"
-        android:layout_marginBottom="0dp"/>
+        android:text="Info"
+        android:id="@+id/widget_wv_tv_info"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/widget_wv_btn_settings"
+        android:layout_toStartOf="@+id/widget_wv_btn_reload"
+        android:layout_above="@+id/widget_wv_iv" />
 
     <ImageView
         style="?android:attr/buttonStyleSmall"
@@ -55,8 +43,16 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_settings_black_24dp"
         android:id="@+id/widget_wv_btn_settings"
-        android:layout_below="@+id/widget_wv_btn_left"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/widget_wv_iv" />
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/widget_wv_btn_left" />
+
+    <ImageView
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_refresh_black_24dp"
+        android:id="@+id/widget_wv_btn_reload"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/widget_wv_btn_right" />
 
 </RelativeLayout>

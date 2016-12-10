@@ -425,7 +425,7 @@ public class LinkDbManager {
         ArrayList<SwitchWidgetLinksRow> rows = getSwitchWidgetLinksRowsByWidgetId(switchWidgetId);
         int linkId = 0;
         for(SwitchWidgetLinksRow row : rows) {
-            Log.d(TAG, "Row: " + row.getSwitchWidgetId() + " " + row.getLinkId() + " " + row.getPos());
+            Log.d(TAG, "Row: switchWidgetId=" + row.getSwitchWidgetId() + "  linkID=" + row.getLinkId() + " pos=" + row.getPos());
             if(row.getPos() == currentLinkPosition) {
                 linkId = row.getLinkId();
                 Log.d(TAG, "LinkId is: " + linkId);

@@ -45,9 +45,15 @@ public class WidgetUpdateService extends IntentService {
 
         // get the current link
         Link currentLink = linkDbManager.getCurrentLinkBySwitchWidget(id);
-        if(currentLink == null) return;
+        if(currentLink == null) {
+            Log.d(TAG, "LinkDbManager returned a null object as currentLink.");
+            return;
+        }
         String currentLinkLink = currentLink.getLink();
-        if(currentLinkLink.isEmpty()) return;
+        if(currentLinkLink.isEmpty())  {
+            Log.d(TAG, "Link object has no link string.");
+            return;
+        }
 
         Log.d(TAG, "Current Link is: " + currentLinkLink);
 

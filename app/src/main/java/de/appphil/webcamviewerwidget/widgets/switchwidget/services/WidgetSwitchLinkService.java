@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.db.SwitchWidgetLinksRow;
-import de.appphil.webcamviewerwidget.link.Link;
 
 public class WidgetSwitchLinkService extends IntentService{
 
@@ -36,24 +35,26 @@ public class WidgetSwitchLinkService extends IntentService{
 
         // get current link position
         int currentLinkPosition = linkDbManager.getSwitchWidgetCurrentLinkPosition(id);
+        Log.d(TAG, "currentLinkPosition: " + currentLinkPosition);
         // get count of links in the widget linklist
         ArrayList<SwitchWidgetLinksRow> links = linkDbManager.getSwitchWidgetLinksRowsByWidgetId(id);
         int countOfLinks = links.size();
         // set new current link
         int newPosition;
         if(left) {
-            if(currentLinkPosition == 0) {
-                newPosition = countOfLinks-1;
+            if(currentLinkPosition == 1) {
+                newPosition = countOfLinks;
             } else {
                 newPosition = currentLinkPosition-1;
             }
         } else {
-            if(currentLinkPosition == countOfLinks-1) {
-                newPosition = 0;
+            if(currentLinkPosition == countOfLinks) {
+                newPosition = 1;
             } else {
                 newPosition = currentLinkPosition+1;
             }
         }
+        Log.d(TAG, "newPosition=" + newPosition);
         linkDbManager.updateSwitchWidgetCurrentLinkPosition(id, newPosition);
 
 
