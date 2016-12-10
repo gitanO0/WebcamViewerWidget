@@ -2,6 +2,7 @@ package de.appphil.webcamviewerwidget.widgets.switchwidget.services;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,23 +12,25 @@ import de.appphil.webcamviewerwidget.link.Link;
 
 public class WidgetSwitchLinkService extends IntentService{
 
+    private static final String TAG = WidgetSwitchLinkService.class.getSimpleName();
+
     public WidgetSwitchLinkService() {
         super("WidgetSwitchLinkService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        System.out.println("Running WidgetSwitchLinkService now!");
+        Log.d(TAG, "Running WidgetSwitchLinkService now!");
 
         boolean left = intent.getBooleanExtra("left", false);
         if (left) {
-            System.out.println("Button left clicked.");
+            Log.d(TAG, "Button left clicked.");
         } else {
-            System.out.println("Button right clicked.");
+            Log.d(TAG, "Button right clicked.");
         }
 
         int id = intent.getIntExtra("id", 0);
-        System.out.println("Switching on widget with id: " + id);
+        Log.d(TAG, "Switching on widget with id: " + id);
 
         LinkDbManager linkDbManager = new LinkDbManager(this);
 

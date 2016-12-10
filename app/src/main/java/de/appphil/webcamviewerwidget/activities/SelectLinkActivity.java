@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
@@ -18,6 +19,8 @@ import de.appphil.webcamviewerwidget.link.LinkListAdapter;
 import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
 
 public class SelectLinkActivity extends AppCompatActivity {
+
+    private static final String TAG = SelectLinkActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class SelectLinkActivity extends AppCompatActivity {
         LinkListAdapter adapter = new LinkListAdapter(this, linkDbManager.getAllLinks(), new RVOnItemClickListener() {
             @Override
             public void onItemClick(Link link) {
-                System.out.println("User clicked on link with id: " + link.getId());
+                Log.d(TAG, "User clicked on link with id: " + link.getId());
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result", (int)link.getId());
                 setResult(Activity.RESULT_OK, returnIntent);

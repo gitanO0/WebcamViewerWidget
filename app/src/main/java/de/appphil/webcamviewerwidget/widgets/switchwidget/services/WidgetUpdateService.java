@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
@@ -18,11 +19,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.appphil.webcamviewerwidget.R;
+import de.appphil.webcamviewerwidget.activities.SelectLinkActivity;
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.utils.Vars;
 
 public class WidgetUpdateService extends IntentService {
+
+    private static final String TAG = WidgetUpdateService.class.getSimpleName();
 
     public WidgetUpdateService() {
         super("WidgetUpdateService");
@@ -30,12 +34,12 @@ public class WidgetUpdateService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        System.out.println("Running WidgetUpdateService now!");
+        Log.d(TAG, "Running WidgetUpdateService now!");
 
         String info = null;
 
         int id = intent.getIntExtra("id", 0);
-        System.out.println("Updating widget with id: " + id);
+        Log.d(TAG, "Updating widget with id: " + id);
 
         LinkDbManager linkDbManager = new LinkDbManager(this);
 
@@ -45,7 +49,7 @@ public class WidgetUpdateService extends IntentService {
         String currentLinkLink = currentLink.getLink();
         if(currentLinkLink.isEmpty()) return;
 
-        System.out.println("Current Link is: " + currentLinkLink);
+        Log.d(TAG, "Current Link is: " + currentLinkLink);
 
         // download image from link and save it to internal storage
         Picasso picasso = Picasso.with(getApplicationContext());

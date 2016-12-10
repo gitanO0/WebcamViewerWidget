@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import de.appphil.webcamviewerwidget.R;
@@ -17,9 +18,11 @@ import de.appphil.webcamviewerwidget.activities.ViewImageActivity;
 
 public class SwitchWidgetProvider extends AppWidgetProvider {
 
+    private static final String TAG = SwitchWidgetProvider.class.getSimpleName();
+
     @Override
     public void onEnabled(Context context) {
-        System.out.println("Widget enabled!");
+        Log.d(TAG, "Widget enabled!");
     }
 
     @Override
@@ -28,13 +31,13 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
     }
 
     public void onUpdate(final Context context, AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
-        System.out.println("onUpdate called");
+        Log.d(TAG, "onUpdate called");
 
         LinkDbManager linkDbManager = new LinkDbManager(context);
 
         // Perform this loop procedure for each App Widget that belongs to this provider
         for(int appWidgetId : appWidgetIds) {
-            System.out.println("AppWidgetId: " + appWidgetId);
+            Log.d(TAG, "AppWidgetId: " + appWidgetId);
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_switch);
 

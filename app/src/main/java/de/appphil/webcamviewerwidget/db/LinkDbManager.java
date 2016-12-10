@@ -5,12 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 import de.appphil.webcamviewerwidget.link.Link;
 
 public class LinkDbManager {
+
+    private static final String TAG = LinkDbManager.class.getSimpleName();
 
     private LinkReaderDbHelper dbHelper;
 
@@ -30,7 +33,7 @@ public class LinkDbManager {
      * @param link
      */
     public void addLink(String name, String link) {
-        System.out.println("addLink in LinkDbManager got name: " + name + " and link: " + link);
+        Log.d(TAG, "addLink in LinkDbManager got name: " + name + " and link: " + link);
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -41,7 +44,7 @@ public class LinkDbManager {
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(LinkReaderContract.LinkEntry.TABLE_NAME, null, values);
-        System.out.println("This link gets the id: " + newRowId);
+        Log.d(TAG, "This link gets the id: " + newRowId);
 
         db.close();
     }
@@ -73,7 +76,7 @@ public class LinkDbManager {
             long itemId = cursor.getLong(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry._ID));
             String itemName = cursor.getString(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry.COLUMN_NAME_NAME));
             String itemLink = cursor.getString(cursor.getColumnIndexOrThrow(LinkReaderContract.LinkEntry.COLUMN_NAME_LINK));
-            System.out.println("Found link with id: " + itemId + " name: " + itemName + " link: " + itemLink);
+            Log.d(TAG, "Found link with id: " + itemId + " name: " + itemName + " link: " + itemLink);
             // add to allLinks list
             allLinks.add(new Link(itemId, itemName, itemLink));
             cursor.moveToNext();
@@ -414,7 +417,7 @@ public class LinkDbManager {
 
     public Link getCurrentLinkBySwitchWidget(int switchWidgetId) {
         int currentLinkPosition = getSwitchWidgetCurrentLinkPosition(switchWidgetId);
-        System.out.println("CurrentLinkPosition: " + currentLinkPosition);
+        Log.d(TAG, "CurrentLinkPosition: " + currentLinkPosition);
         if(currentLinkPosition == -1) {
             // there is no link
             return null;
@@ -422,10 +425,10 @@ public class LinkDbManager {
         ArrayList<SwitchWidgetLinksRow> rows = getSwitchWidgetLinksRowsByWidgetId(switchWidgetId);
         int linkId = 0;
         for(SwitchWidgetLinksRow row : rows) {
-            System.out.println("Row: " + row.getSwitchWidgetId() + " " + row.getLinkId() + " " + row.getPos());
+            Log.d(TAG, "Row: " + row.getSwitchWidgetId() + " " + row.getLinkId() + " " + row.getPos());
             if(row.getPos() == currentLinkPosition) {
                 linkId = row.getLinkId();
-                System.out.println("LinkId is: " + linkId);
+                Log.d(TAG, "LinkId is: " + linkId);
                 break;
             }
         }

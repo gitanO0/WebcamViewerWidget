@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +30,8 @@ import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
 import de.appphil.webcamviewerwidget.widgets.switchwidget.SwitchWidgetLinksEditAdapter;
 
 public class SwitchWidgetConfigActivity extends AppCompatActivity {
+
+    private static final String TAG = SwitchWidgetConfigActivity.class.getSimpleName();
 
     /***
      * Button to add a link to the list.
@@ -70,7 +73,7 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
         }
 
         appWidgetId = getIntent().getIntExtra("id", 0);
-        System.out.println("Started switch widget confi activity for widget with id: " + appWidgetId);
+        Log.d(TAG, "Started switch widget confi activity for widget with id: " + appWidgetId);
 
         btnAdd = (Button) findViewById(R.id.switchwidgetconfig_btn_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +102,7 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
             int linkId = data.getExtras().getInt("result");
-            System.out.println("SwitchWidgetConfigActivity got result linkId: " + linkId);
+            Log.d(TAG, "SwitchWidgetConfigActivity got result linkId: " + linkId);
             // add this link to the widgets linklist
             linkDbManager.addLinkToSwitchWidgetLinklist(appWidgetId, linkId);
 
@@ -154,9 +157,9 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
      */
     private void updateRecyclerView() {
         ArrayList<SwitchWidgetLinksRow> rows = linkDbManager.getSwitchWidgetLinksRowsByWidgetId(appWidgetId);
-        System.out.println("Rows: " + rows.size());
+        Log.d(TAG, "Rows: " + rows.size());
         for(SwitchWidgetLinksRow row : rows) {
-            System.out.println("Row: " + row.getSwitchWidgetId() + " " + row.getLinkId() + " " + row.getPos());
+            Log.d(TAG, "Row: " + row.getSwitchWidgetId() + " " + row.getLinkId() + " " + row.getPos());
         }
 
         linklist = rowsToLinks(rows);

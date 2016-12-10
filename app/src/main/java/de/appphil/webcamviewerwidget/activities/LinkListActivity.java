@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,6 +29,8 @@ import de.appphil.webcamviewerwidget.link.RVEditOnItemClickListener;
 import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
 
 public class LinkListActivity extends AppCompatActivity {
+
+    private static final String TAG = LinkListActivity.class.getSimpleName();
 
     /***
      * RecyclerView to show the linklist.
@@ -144,11 +147,11 @@ public class LinkListActivity extends AppCompatActivity {
         linklist = linkDbManager.getAllLinks();
 
         if(linklist.isEmpty()) {
-            System.out.println("Linklist from db is empty.");
+            Log.d(TAG, "Linklist from db is empty.");
         } else {
-            System.out.println("Linklist:");
+            Log.d(TAG, "Linklist:");
             for(Link link : linklist) {
-                System.out.println(link.getId() + " " + link.getName() + " " + link.getLink());
+                Log.d(TAG, link.getId() + " " + link.getName() + " " + link.getLink());
             }
         }
 
@@ -281,7 +284,7 @@ public class LinkListActivity extends AppCompatActivity {
                 String name = etName.getText().toString();
                 String link = etLink.getText().toString();
 
-                System.out.println("User input: " + name + " " + link);
+                Log.d(TAG, "User input: " + name + " " + link);
 
                 // add new Link objects to link database table
                 linkDbManager.addLink(name, link);
