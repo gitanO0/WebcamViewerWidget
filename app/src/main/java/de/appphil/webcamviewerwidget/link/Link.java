@@ -17,11 +17,6 @@ public class Link {
      */
     private String link;
 
-    /***
-     * Only needed for ExportActivity.
-     */
-    private boolean checked = false;
-
 
     /***
      * Constructor for Link.
@@ -57,21 +52,5 @@ public class Link {
      */
     public String getLink() {
         return link;
-    }
-
-    /***
-     * Changes the checked state.
-     * @param checked If the link is checked.
-     */
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
-    /***
-     * Returns if the link is checked.
-     * @return If the link is checked.
-     */
-    public boolean isChecked() {
-        return checked;
     }
 }

@@ -31,6 +31,8 @@
         <activity android:name=".activities.InfoActivity" />
         <activity android:name=".activities.SwitchWidgetConfigActivity" />
         <activity android:name=".activities.SelectLinkActivity" />
+        <activity android:name=".activities.ExportActivity" />
+        <activity android:name=".activities.ImportActivity" />
 
         <service
             android:name=".widgets.switchwidget.services.WidgetUpdateService"

@@ -131,6 +131,12 @@ public class LinkListActivity extends AppCompatActivity {
                     updateRecyclerView();
                 }
                 return true;
+            case R.id.menu_linklist_export:
+                startExportActivity();
+                return true;
+            case R.id.menu_linklist_import:
+                startImportActivity();
+                return true;
             case R.id.menu_linklist_info:
                 startInfoActivity();
                 return true;
@@ -175,6 +181,22 @@ public class LinkListActivity extends AppCompatActivity {
      */
     private void startInfoActivity() {
         Intent intent = new Intent(this, InfoActivity.class);
+        startActivity(intent);
+    }
+
+    /***
+     * Starts the ExportActivity.
+     */
+    private void startExportActivity() {
+        Intent intent = new Intent(this, ExportActivity.class);
+        startActivity(intent);
+    }
+
+    /***
+     * Starts the ImportActivity.
+     */
+    private void startImportActivity() {
+        Intent intent = new Intent(this, ImportActivity.class);
         startActivity(intent);
     }
 
