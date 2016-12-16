@@ -45,11 +45,13 @@ public class WidgetUpdateService extends IntentService {
         Link currentLink = linkDbManager.getCurrentLinkBySwitchWidget(id);
         if(currentLink == null) {
             Log.d(TAG, "LinkDbManager returned a null object as currentLink.");
+            updateFailed(id);
             return;
         }
         String currentLinkLink = currentLink.getLink();
         if(currentLinkLink.isEmpty())  {
             Log.d(TAG, "Link object has no link string.");
+            updateFailed(id);
             return;
         }
 
@@ -67,7 +69,11 @@ public class WidgetUpdateService extends IntentService {
             e.printStackTrace();
         }
 
-        if(bitmap == null) return;
+        if(bitmap == null) {
+            Log.d(TAG, "Bitmap is null.");
+            updateFailed(id);
+            return;
+        }
 
         try {
             File folder = new File(getFilesDir() + "/" + id);
@@ -132,6 +138,17 @@ public class WidgetUpdateService extends IntentService {
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
         remoteViews.setViewVisibility(R.id.widget_wv_pb, View.GONE);
         appWidgetManager.updateAppWidget(id, remoteViews);
+    }
+
+
+    /***
+     * Hides the progress bar of the widget with the given id
+     * and changes the info text to "Download failed".
+     * @param id
+     */
+    private void updateFailed(int id) {
+        hideProgressBar(id);
+        updateWidgetInfoText(getResources().getString(R.string.download_failed), id);
     }
 
 }
