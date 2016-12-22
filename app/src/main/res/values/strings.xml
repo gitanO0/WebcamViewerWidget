@@ -41,4 +41,5 @@
     <string name="switch_widget">Switch Widget</string>
     <string name="config">Config</string>
     <string name="select_link">Select link</string>
+    <string name="single_auto_update_widget">Single auto update widget</string>
 </resources>

@@ -489,5 +489,53 @@ public class LinkDbManager {
         db.close();
     }
 
+    public void addSingleAutoUpdateWidget(int widgetId, int linkId) {
+        // Gets the data repository in write mode
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_WIDGET_ID, widgetId);
+        values.put(LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_LINK_ID, linkId);
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(LinkReaderContract.SingleAutoUpdateWidgetLinks.TABLE_NAME, null, values);
+
+        db.close();
+    }
+
+    public int getLinkIdBySingleAutoUpdateWidgetId(int widgetId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_LINK_ID
+        };
+
+        String selection = LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_WIDGET_ID + " = ?";
+        String[] selectionArgs = { "" + widgetId };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder = LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_WIDGET_ID + " ASC";
+
+        Cursor cursor = db.query(
+                LinkReaderContract.SingleAutoUpdateWidgetLinks.TABLE_NAME,// The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+        if(cursor.getCount() == 0) return -1;
+
+        cursor.moveToFirst();
+
+        int itemLinkId = cursor.getInt(cursor.getColumnIndexOrThrow(LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_LINK_ID));
+
+        cursor.close();
+        db.close();
+        return itemLinkId;
+    }
 
 }

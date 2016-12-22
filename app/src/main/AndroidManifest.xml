@@ -27,18 +27,35 @@
                 android:resource="@xml/switchwidgetproviderinfo" />
         </receiver>
 
+        <receiver android:name=".widgets.singleautoupdatewidget.SingleAutoUpdateWidgetProvider" android:label="@string/single_auto_update_widget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/singleautoupdatewidgetproviderinfo" />
+        </receiver>
+
         <activity android:name=".activities.ViewImageActivity" />
         <activity android:name=".activities.InfoActivity" />
         <activity android:name=".activities.SwitchWidgetConfigActivity" />
         <activity android:name=".activities.SelectLinkActivity" />
         <activity android:name=".activities.ExportActivity" />
         <activity android:name=".activities.ImportActivity" />
+        <activity android:name=".activities.SAUWidgetConfigActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".widgets.switchwidget.services.WidgetUpdateService"
             android:exported="false"/>
         <service
             android:name=".widgets.switchwidget.services.WidgetSwitchLinkService"
+            android:exported="false"/>
+
+        <service
+            android:name=".widgets.singleautoupdatewidget.SAUWidgetUpdateService"
             android:exported="false"/>
 
      </application>

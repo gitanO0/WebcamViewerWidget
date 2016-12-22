@@ -26,4 +26,10 @@ public final class LinkReaderContract {
         public static final String COLUMN_NAME_WIDGET_ID = "widget_id";
         public static final String COLUMN_NAME_CURRENT_LINK_POS = "current_link_pos";
     }
+
+    public static class SingleAutoUpdateWidgetLinks implements BaseColumns {
+        public static final String TABLE_NAME = "single_auto_update_widget_links";
+        public static final String COLUMN_NAME_WIDGET_ID = "widget_id";
+        public static final String COLUMN_NAME_LINK_ID = "link_id";
+    }
 }

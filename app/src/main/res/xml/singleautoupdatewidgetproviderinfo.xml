@@ -1,0 +1,10 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="40dp"
+    android:minHeight="40dp"
+    android:updatePeriodMillis="3600000"
+    android:previewImage="@mipmap/ic_launcher"
+    android:initialLayout="@layout/widget_singleautoupdate"
+    android:resizeMode="horizontal|vertical"
+    android:configure="de.appphil.webcamviewerwidget.activities.SAUWidgetConfigActivity"
+    android:widgetCategory="home_screen">
+</appwidget-provider>
