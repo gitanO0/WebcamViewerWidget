@@ -1,10 +1,16 @@
 package de.appphil.webcamviewerwidget.widgets.singleautoupdatewidget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.RemoteViews;
+
+import de.appphil.webcamviewerwidget.R;
+import de.appphil.webcamviewerwidget.activities.ViewImageActivity;
+import de.appphil.webcamviewerwidget.utils.Vars;
 
 
 /**
@@ -22,10 +28,20 @@ public class SingleAutoUpdateWidgetProvider extends AppWidgetProvider {
         for(int appWidgetId : appWidgetIds) {
             Log.d(TAG, "AppWidgetId: " + appWidgetId);
 
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_singleautoupdate);
+
             // reload image
             Intent intent = new Intent(context, SAUWidgetUpdateService.class);
             intent.putExtra("id", appWidgetId);
             context.startService(intent);
+
+            Intent intentViewImage = new Intent(context, ViewImageActivity.class);
+            intentViewImage.putExtra(ViewImageActivity.EXTRA_IMAGE_PATH, appWidgetId + "/" + Vars.SAU_IMAGE_FILENAME);
+            PendingIntent piViewImage = PendingIntent.getActivity(context, appWidgetId, intentViewImage, PendingIntent.FLAG_CANCEL_CURRENT);
+            views.setOnClickPendingIntent(R.id.widget_sau_iv, piViewImage);
+
+            // Tell the AppWidgetManager to perform an update on the current app widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }
 }
