@@ -13,6 +13,7 @@ import android.widget.RemoteViews;
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.activities.SwitchWidgetConfigActivity;
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
+import de.appphil.webcamviewerwidget.utils.Vars;
 import de.appphil.webcamviewerwidget.widgets.switchwidget.services.WidgetSwitchLinkService;
 import de.appphil.webcamviewerwidget.widgets.switchwidget.services.WidgetUpdateService;
 import de.appphil.webcamviewerwidget.activities.ViewImageActivity;
@@ -80,7 +81,7 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
             //
             //ViewImageActivity should be started when image view is clicked
             Intent intentViewImage = new Intent(context, ViewImageActivity.class);
-            intentViewImage.putExtra("id", appWidgetId);
+            intentViewImage.putExtra(ViewImageActivity.EXTRA_IMAGE_PATH, appWidgetId + "/" + Vars.IMAGE_FILENAME);
             PendingIntent piViewImage = PendingIntent.getActivity(context, appWidgetId, intentViewImage, PendingIntent.FLAG_CANCEL_CURRENT);
             views.setOnClickPendingIntent(R.id.widget_wv_iv, piViewImage);
 

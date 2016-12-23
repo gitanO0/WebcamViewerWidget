@@ -13,6 +13,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class ViewImageActivity extends Activity {
 
+    public static final String EXTRA_IMAGE_PATH = "imagePath";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,12 +22,12 @@ public class ViewImageActivity extends Activity {
 
         ImageView iv = (ImageView) findViewById(R.id.viewimage_iv);
 
-        int id = getIntent().getIntExtra("id", 0);
+        String imagePath = getIntent().getStringExtra(EXTRA_IMAGE_PATH);
 
         // load image from internal storage into iv
         Picasso picasso = Picasso.with(this);
         picasso.setLoggingEnabled(true);
-        File file = new File(this.getFilesDir() + "/" + id + "/" + Vars.IMAGE_FILENAME);
+        File file = new File(this.getFilesDir() + "/" + imagePath);
         picasso.invalidate(file);
         picasso.load(file).into(iv);
 
