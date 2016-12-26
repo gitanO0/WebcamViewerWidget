@@ -38,7 +38,7 @@ public class SingleAutoUpdateWidgetProvider extends AppWidgetProvider {
             Intent intentViewImage = new Intent(context, ViewImageActivity.class);
             intentViewImage.putExtra(ViewImageActivity.EXTRA_IMAGE_PATH, appWidgetId + "/" + Vars.SAU_IMAGE_FILENAME);
             PendingIntent piViewImage = PendingIntent.getActivity(context, appWidgetId, intentViewImage, PendingIntent.FLAG_CANCEL_CURRENT);
-            views.setOnClickPendingIntent(R.id.widget_sau_iv, piViewImage);
+            views.setOnClickPendingIntent(R.id.widget_sau_rl, piViewImage);
 
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);

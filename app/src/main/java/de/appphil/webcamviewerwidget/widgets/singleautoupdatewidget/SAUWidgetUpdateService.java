@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
@@ -49,6 +50,8 @@ public class SAUWidgetUpdateService extends IntentService {
 
         Log.d(TAG, "Link is: " + link);
 
+        showProgressBar(id);
+
         // download image from link and save it to internal storage
         Picasso picasso = Picasso.with(getApplicationContext());
         picasso.setLoggingEnabled(true);
@@ -61,6 +64,7 @@ public class SAUWidgetUpdateService extends IntentService {
 
         if(bitmap == null) {
             Log.d(TAG, "Bitmap is null.");
+            hideProgressBar(id);
             return;
         }
 
@@ -78,10 +82,34 @@ public class SAUWidgetUpdateService extends IntentService {
             e.printStackTrace();
         }
 
+        hideProgressBar(id);
+
         // update widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_singleautoupdate);
         remoteViews.setImageViewBitmap(R.id.widget_sau_iv, bitmap);
+        appWidgetManager.updateAppWidget(id, remoteViews);
+    }
+
+    /***
+     * Shows the progress bar.
+     * @param id
+     */
+    private void showProgressBar(int id) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_singleautoupdate);
+        remoteViews.setViewVisibility(R.id.widget_sau_pb, View.VISIBLE);
+        appWidgetManager.updateAppWidget(id, remoteViews);
+    }
+
+    /***
+     * Hides the progress bar again.
+     * @param id
+     */
+    private void hideProgressBar(int id) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_singleautoupdate);
+        remoteViews.setViewVisibility(R.id.widget_sau_pb, View.GONE);
         appWidgetManager.updateAppWidget(id, remoteViews);
     }
 }
