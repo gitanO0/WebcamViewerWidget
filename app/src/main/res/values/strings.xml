@@ -42,4 +42,7 @@
     <string name="config">Config</string>
     <string name="select_link">Select link</string>
     <string name="single_auto_update_widget">Single auto update widget</string>
+    <string name="save_image_dialog_message">Do you want to save this image?</string>
+    <string name="save_image_dialog_title">Save image?</string>
+    <string name="image_saved">Image saved!</string>
 </resources>
