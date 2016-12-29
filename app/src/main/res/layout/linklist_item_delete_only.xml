@@ -26,6 +26,7 @@
         android:src="@mipmap/ic_delete_black_24dp"
         android:id="@+id/linklist_item_delete_only_iv_delete"
         android:layout_marginRight="13dp"
+        android:alpha="0.54"
         android:layout_marginTop="13dp" />
 
 </RelativeLayout>

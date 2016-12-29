@@ -24,6 +24,7 @@
         android:layout_height="28dp"
         android:layout_marginTop="13dp"
         android:layout_marginRight="13dp"
+        android:alpha="0.54"
         android:layout_alignParentEnd="true" />
 
     <ImageView
@@ -32,6 +33,7 @@
         android:layout_marginRight="5dp"
         android:layout_width="28dp"
         android:layout_height="28dp"
+        android:alpha="0.54"
         android:layout_alignTop="@+id/linklist_item_iv_delete"
         android:layout_toStartOf="@+id/linklist_item_iv_delete" />
 
