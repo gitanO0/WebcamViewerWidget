@@ -41,6 +41,11 @@ public class SwitchWidgetProvider extends AppWidgetProvider {
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_switch);
 
+            // reload image
+            Intent intent = new Intent(context, WidgetUpdateService.class);
+            intent.putExtra("id", appWidgetId);
+            context.startService(intent);
+
             /*
             Reload Button
              */
