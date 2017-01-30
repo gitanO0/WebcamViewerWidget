@@ -47,9 +47,10 @@ public class SAUWidgetConfigActivity extends AppCompatActivity {
             Log.d(TAG, "got result linkId: " + linkId);
             // add this link to the db table
             LinkDbManager linkDbManager = new LinkDbManager(this);
+            Log.d(TAG, "appWidgetId: " + appWidgetId);
             linkDbManager.addSingleAutoUpdateWidget(appWidgetId, linkId);
 
-            // update widget (cause onUpdate is not called because of the configuration acitivity)
+            // update widget (cause onUpdate is not called because of the configuration activity)
             Intent updateService = new Intent(this, SAUWidgetUpdateService.class);
             updateService.putExtra("id", appWidgetId);
             startService(updateService);

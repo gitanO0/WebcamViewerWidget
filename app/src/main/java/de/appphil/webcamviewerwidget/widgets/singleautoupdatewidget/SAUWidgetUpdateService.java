@@ -44,6 +44,7 @@ public class SAUWidgetUpdateService extends IntentService {
         LinkDbManager linkDbManager = new LinkDbManager(this);
         // get link id of this widget
         int linkId = linkDbManager.getLinkIdBySingleAutoUpdateWidgetId(id);
+        Log.d(TAG, "Link Id is: " + linkId);
         if(linkId == -1) return;
         // get link by id
         Link l = linkDbManager.getLinkById(linkId);

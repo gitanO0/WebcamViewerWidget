@@ -25,6 +25,9 @@ public class LinkDbManager {
 
     public LinkDbManager(Context context) {
         dbHelper = new LinkReaderDbHelper(context);
+
+
+        //printDatabase(); <- use this for debugging
     }
 
     /***
@@ -490,6 +493,8 @@ public class LinkDbManager {
     }
 
     public void addSingleAutoUpdateWidget(int widgetId, int linkId) {
+        printDatabase();
+        Log.d(TAG, "addSingleAutoUpdateWidget called");
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -502,6 +507,7 @@ public class LinkDbManager {
         long newRowId = db.insert(LinkReaderContract.SingleAutoUpdateWidgetLinks.TABLE_NAME, null, values);
 
         db.close();
+        printDatabase();
     }
 
     public int getLinkIdBySingleAutoUpdateWidgetId(int widgetId) {
@@ -536,6 +542,39 @@ public class LinkDbManager {
         cursor.close();
         db.close();
         return itemLinkId;
+    }
+
+    private void printDatabase() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_LINK_ID,
+                LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_WIDGET_ID
+        };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder = LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_WIDGET_ID + " ASC";
+
+        Cursor cursor = db.query(
+                LinkReaderContract.SingleAutoUpdateWidgetLinks.TABLE_NAME,// The table to query
+                projection,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+        cursor.moveToFirst();
+
+        for(int i = 0; i < cursor.getCount(); i++) {
+            int linkId = cursor.getInt(cursor.getColumnIndexOrThrow(LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_LINK_ID));
+            int w = cursor.getInt(cursor.getColumnIndexOrThrow(LinkReaderContract.SingleAutoUpdateWidgetLinks.COLUMN_NAME_WIDGET_ID));
+            Log.d(TAG, "linkId: " + linkId + " widgetId: " + w);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
     }
 
 }
