@@ -42,4 +42,7 @@
     <string name="save_image_dialog_message">Willst du dieses Bild speichern?</string>
     <string name="save_image_dialog_title">Bild speichern?</string>
     <string name="image_saved">Bild gespeichert!</string>
+    <string name="link">Link</string>
+    <string name="name">Name</string>
+    <string name="single_auto_update_widget">Single auto update widget</string>
 </resources>

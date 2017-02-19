@@ -7,3 +7,5 @@
 /build
 /captures
 projectFilesBackup/.idea/workspace.xml
+keystore.jks
+app/app-release.apk
