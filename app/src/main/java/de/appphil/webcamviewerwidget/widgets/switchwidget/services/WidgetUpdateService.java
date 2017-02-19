@@ -3,10 +3,14 @@ package de.appphil.webcamviewerwidget.widgets.switchwidget.services;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RemoteViews;
 
 import com.squareup.picasso.Picasso;
@@ -103,6 +107,20 @@ public class WidgetUpdateService extends IntentService {
         // update widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
+
+        int bytes = bitmap.getByteCount();
+        WindowManager windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        double maxBytes = width * height * 4 * 1.5;
+        while(bytes > maxBytes) {
+            bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.9), (int)(bitmap.getHeight()*0.9), false);
+            bytes = bitmap.getByteCount();
+        }
+
         remoteViews.setImageViewBitmap(R.id.widget_wv_iv, bitmap);
         remoteViews.setTextViewText(R.id.widget_wv_tv_info, info);
 
