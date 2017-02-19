@@ -36,7 +36,7 @@
                 android:resource="@xml/singleautoupdatewidgetproviderinfo" />
         </receiver>
 
-        <activity android:name=".activities.ViewImageActivity" />
+        <activity android:name=".activities.ViewImageActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".activities.InfoActivity" />
         <activity android:name=".activities.SwitchWidgetConfigActivity" />
         <activity android:name=".activities.SelectLinkActivity" />
