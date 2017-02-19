@@ -121,4 +121,11 @@ public class ViewImageActivity extends Activity {
             }
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // finish so that new images can be shown
+        finish();
+    }
 }
