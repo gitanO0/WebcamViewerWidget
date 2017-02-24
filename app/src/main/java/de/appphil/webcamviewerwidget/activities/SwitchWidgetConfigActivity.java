@@ -165,6 +165,11 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
 
         linklist = rowsToLinks(rows);
         if(!deleteModeEnabled) {
+            if(menu != null) {
+                menu.findItem(R.id.menu_switchwidgetconfig_edit).setTitle(getResources().getString(R.string.edit));
+            }
+            editing = false;
+
             LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
                 @Override
                 public void onItemClick(Link link) {
