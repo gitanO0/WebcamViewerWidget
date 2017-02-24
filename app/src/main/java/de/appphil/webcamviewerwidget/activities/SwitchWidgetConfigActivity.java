@@ -91,7 +91,7 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
         if(!linkDbManager.isSwitchWidgetSaved(appWidgetId)) {
             linkDbManager.addSwitchWidget(appWidgetId, -1);
         } else {
-            updateRecyclerView();
+            updateRecyclerView(false);
         }
     }
 
@@ -105,7 +105,7 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
                 linkDbManager.addLinkToSwitchWidgetLinklist(appWidgetId, (int)link.getId());
             }
 
-            updateRecyclerView();
+            updateRecyclerView(false);
         }
     }
 
@@ -122,26 +122,12 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_switchwidgetconfig_edit:
                 if(!editing) {
-                    final SwitchWidgetLinksEditAdapter adapter = new SwitchWidgetLinksEditAdapter(getApplicationContext(), linklist, new RVEditOnItemClickListener() {
-                        @Override
-                        public void onItemClickEdit(Link link) {
-                            // not needed here
-                        }
-                        @Override
-                        public void onItemClickDelete(Link link) {
-                            // remove link with the given id from the db table
-                            linkDbManager.deleteLinkFromSwitchWidgetLinklist(appWidgetId, (int)link.getId());
-                            updateRecyclerView();
-                            menu.findItem(R.id.menu_switchwidgetconfig_edit).setTitle(getResources().getString(R.string.edit));
-                            editing = false;
-                        }
-                    });
-                    rv.setAdapter(adapter);
+                    showEditAdapter();
 
                     editing = true;
                     item.setTitle(getResources().getString(R.string.ready_with_editing));
                 } else {
-                    updateRecyclerView();
+                    updateRecyclerView(false);
                     item.setTitle(getResources().getString(R.string.edit));
                     editing = false;
                 }
@@ -151,10 +137,26 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
         }
     }
 
+    private void showEditAdapter() {
+        final SwitchWidgetLinksEditAdapter adapter = new SwitchWidgetLinksEditAdapter(getApplicationContext(), linklist, new RVEditOnItemClickListener() {
+            @Override
+            public void onItemClickEdit(Link link) {
+                // not needed here
+            }
+            @Override
+            public void onItemClickDelete(Link link) {
+                // remove link with the given id from the db table
+                linkDbManager.deleteLinkFromSwitchWidgetLinklist(appWidgetId, (int)link.getId());
+                updateRecyclerView(true);
+            }
+        });
+        rv.setAdapter(adapter);
+    }
+
     /***
      * Gets the links from db and shows them in rv.
      */
-    private void updateRecyclerView() {
+    private void updateRecyclerView(boolean deleteModeEnabled) {
         ArrayList<SwitchWidgetLinksRow> rows = linkDbManager.getSwitchWidgetLinksRowsByWidgetId(appWidgetId);
         Log.d(TAG, "Rows: " + rows.size());
         for(SwitchWidgetLinksRow row : rows) {
@@ -162,13 +164,17 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
         }
 
         linklist = rowsToLinks(rows);
-        LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
-            @Override
-            public void onItemClick(Link link) {
+        if(!deleteModeEnabled) {
+            LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
+                @Override
+                public void onItemClick(Link link) {
 
-            }
-        });
-        rv.setAdapter(adapter);
+                }
+            });
+            rv.setAdapter(adapter);
+        } else {
+            showEditAdapter();
+        }
     }
 
     private ArrayList<Link> rowsToLinks(ArrayList<SwitchWidgetLinksRow> rows) {
