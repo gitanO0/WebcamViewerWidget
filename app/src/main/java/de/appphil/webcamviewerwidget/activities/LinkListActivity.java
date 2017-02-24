@@ -96,7 +96,7 @@ public class LinkListActivity extends AppCompatActivity {
             }
         });
 
-        updateRecyclerView();
+        updateRecyclerView(false);
     }
 
     @Override
@@ -112,23 +112,12 @@ public class LinkListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_linklist_edit:
                 if(!editing) {
-                    final LinkListEditAdapter adapter = new LinkListEditAdapter(getApplicationContext(), linklist, new RVEditOnItemClickListener() {
-                        @Override
-                        public void onItemClickEdit(Link link) {
-                            showEditLinkDialog(link);
-                        }
-
-                        @Override
-                        public void onItemClickDelete(Link link) {
-                            showDeleteLinkDialog(link);
-                        }
-                    });
-                    rv.setAdapter(adapter);
+                    showLinkListEditAdapter();
 
                     editing = true;
                     item.setTitle(getResources().getString(R.string.ready_with_editing));
                 } else {
-                    updateRecyclerView();
+                    updateRecyclerView(false);
                 }
                 return true;
             case R.id.menu_linklist_export:
@@ -148,7 +137,7 @@ public class LinkListActivity extends AppCompatActivity {
     /***
      * Puts the link names of the linklist hashmap in the listview.
      */
-    private void updateRecyclerView() {
+    private void updateRecyclerView(boolean editModeEnabled) {
         // load links from database
         linklist = linkDbManager.getAllLinks();
 
@@ -161,19 +150,38 @@ public class LinkListActivity extends AppCompatActivity {
             }
         }
 
-        LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
+        if(!editModeEnabled) {
+            LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
+                @Override
+                public void onItemClick(Link link) {
+                    // nothing at the moment
+                }
+            });
+            rv.setAdapter(adapter);
+
+            editing = false;
+
+            if (menu != null) {
+                menu.findItem(R.id.menu_linklist_edit).setTitle(getResources().getString(R.string.edit));
+            }
+        } else {
+            showLinkListEditAdapter();
+        }
+    }
+
+    private void showLinkListEditAdapter() {
+        final LinkListEditAdapter adapter = new LinkListEditAdapter(getApplicationContext(), linklist, new RVEditOnItemClickListener() {
             @Override
-            public void onItemClick(Link link) {
-                // nothing at the moment
+            public void onItemClickEdit(Link link) {
+                showEditLinkDialog(link);
+            }
+
+            @Override
+            public void onItemClickDelete(Link link) {
+                showDeleteLinkDialog(link);
             }
         });
         rv.setAdapter(adapter);
-
-        editing = false;
-
-        if(menu != null) {
-            menu.findItem(R.id.menu_linklist_edit).setTitle(getResources().getString(R.string.edit));
-        }
     }
 
     /***
@@ -234,7 +242,7 @@ public class LinkListActivity extends AppCompatActivity {
                 // update linklist
                 linkDbManager.updateLinkById(id, name, linkString);
                 // update listview
-                updateRecyclerView();
+                updateRecyclerView(true);
                 // dismiss the dialog
                 dialog.dismiss();
             }
@@ -269,7 +277,7 @@ public class LinkListActivity extends AppCompatActivity {
                 // remove from database table
                 linkDbManager.deleteLinkById(id);
                 // update listview
-                updateRecyclerView();
+                updateRecyclerView(true);
 
                 // dismiss the dialog
                 dialog.dismiss();
@@ -312,7 +320,7 @@ public class LinkListActivity extends AppCompatActivity {
                 linkDbManager.addLink(name, link);
 
                 // update listview
-                updateRecyclerView();
+                updateRecyclerView(false);
 
                 // dismiss the dialog
                 dialog.dismiss();
