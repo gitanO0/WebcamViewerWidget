@@ -29,6 +29,12 @@ public class CheckableListAdapter extends RecyclerView.Adapter<CheckableListAdap
 
         public void bind(String text) {
             tv.setText(text);
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cb.setChecked(!cb.isChecked());
+                }
+            });
         }
 
     }
