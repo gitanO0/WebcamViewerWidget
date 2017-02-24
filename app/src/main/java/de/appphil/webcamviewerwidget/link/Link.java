@@ -1,6 +1,8 @@
 package de.appphil.webcamviewerwidget.link;
 
-public class Link {
+import java.io.Serializable;
+
+public class Link implements Serializable{
 
     /***
      * Id of the link in database.

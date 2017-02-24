@@ -71,13 +71,13 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
         }
 
         appWidgetId = getIntent().getIntExtra("id", 0);
-        Log.d(TAG, "Started switch widget confi activity for widget with id: " + appWidgetId);
+        Log.d(TAG, "Started switch widget config activity for widget with id: " + appWidgetId);
 
         btnAdd = (FloatingActionButton) findViewById(R.id.switchwidgetconfig_btn_add);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(getApplicationContext(), SelectLinkActivity.class), REQUEST_CODE);
+                startActivityForResult(new Intent(getApplicationContext(), SelectMultipleLinksActivity.class), REQUEST_CODE);
             }
         });
 
@@ -99,10 +99,11 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            int linkId = data.getExtras().getInt("result");
-            Log.d(TAG, "SwitchWidgetConfigActivity got result linkId: " + linkId);
-            // add this link to the widgets linklist
-            linkDbManager.addLinkToSwitchWidgetLinklist(appWidgetId, linkId);
+            ArrayList<Link> links = (ArrayList<Link>)data.getExtras().getSerializable("result");
+            // add this links to the widgets linklist
+            for(Link link : links) {
+                linkDbManager.addLinkToSwitchWidgetLinklist(appWidgetId, (int)link.getId());
+            }
 
             updateRecyclerView();
         }
