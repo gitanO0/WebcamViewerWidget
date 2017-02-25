@@ -83,6 +83,7 @@ public class LinkListEditAdapter extends RecyclerView.Adapter<LinkListEditAdapte
 
     @Override
     public int getItemCount() {
+        if(linklist == null) return 0;
         return linklist.size();
     }
 }

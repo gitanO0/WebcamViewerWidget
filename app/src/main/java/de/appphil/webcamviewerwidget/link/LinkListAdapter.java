@@ -64,6 +64,7 @@ public class LinkListAdapter extends RecyclerView.Adapter<LinkListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
+        if(linklist == null) return 0;
         return linklist.size();
     }
 }

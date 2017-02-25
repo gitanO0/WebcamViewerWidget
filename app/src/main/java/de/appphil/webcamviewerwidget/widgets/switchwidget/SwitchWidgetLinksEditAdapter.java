@@ -77,6 +77,7 @@ public class SwitchWidgetLinksEditAdapter extends RecyclerView.Adapter<SwitchWid
 
     @Override
     public int getItemCount() {
+        if(linklist == null) return 0;
         return linklist.size();
     }
 }
