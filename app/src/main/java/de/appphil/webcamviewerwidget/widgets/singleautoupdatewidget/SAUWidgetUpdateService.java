@@ -3,8 +3,11 @@ package de.appphil.webcamviewerwidget.widgets.singleautoupdatewidget;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -40,6 +43,12 @@ public class SAUWidgetUpdateService extends IntentService {
 
         int id = intent.getIntExtra("id", 0);
         Log.d(TAG, "Updating widget with id: " + id);
+
+        // first: check if there's an internet connection
+        if(!hasInternetConnection()) {
+            Log.d(TAG, "There's no internet connection so the widget will not update.");
+            return;
+        }
 
         LinkDbManager linkDbManager = new LinkDbManager(this);
         // get link id of this widget
@@ -105,6 +114,7 @@ public class SAUWidgetUpdateService extends IntentService {
      * @param id
      */
     private void showProgressBar(int id) {
+        Log.d(TAG, "Showing progress bar for widget with id=" + id + " now!");
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_singleautoupdate);
         remoteViews.setViewVisibility(R.id.widget_sau_pb, View.VISIBLE);
@@ -116,9 +126,22 @@ public class SAUWidgetUpdateService extends IntentService {
      * @param id
      */
     private void hideProgressBar(int id) {
+        Log.d(TAG, "Hiding progress bar for widget with id=" + id + " now!");
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_singleautoupdate);
         remoteViews.setViewVisibility(R.id.widget_sau_pb, View.GONE);
         appWidgetManager.updateAppWidget(id, remoteViews);
+    }
+
+    /***
+     * Checks if there's an internet connection.
+     * @return
+     */
+    private boolean hasInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 }
