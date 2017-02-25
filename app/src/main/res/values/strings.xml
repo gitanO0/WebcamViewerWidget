@@ -46,4 +46,7 @@
     <string name="save_image_dialog_title">Save image?</string>
     <string name="image_saved">Image saved!</string>
     <string name="linklist_is_empty">You haven\'t added a link yet. Go to the main app to add one!</string>
+    <string name="showcase_title_add_link">Add link</string>
+    <string name="showcase_text_add_link">Click this button to add the first link</string>
+    <string name="showcase_close">Close</string>
 </resources>

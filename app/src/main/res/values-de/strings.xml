@@ -46,4 +46,7 @@
     <string name="name">Name</string>
     <string name="single_auto_update_widget">Single auto update widget</string>
     <string name="linklist_is_empty">Du hast noch keinen Link hinzugefügt. Gehe zur Haupt-App und füge einen hinzu!</string>
+    <string name="showcase_title_add_link">Link hinzufügen</string>
+    <string name="showcase_text_add_link">Klicke auf den Button um den ersten Link hinzuzufügen</string>
+    <string name="showcase_close">Schließen</string>
 </resources>

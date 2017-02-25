@@ -3,6 +3,7 @@ package de.appphil.webcamviewerwidget.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,8 +16,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
 
@@ -97,6 +104,25 @@ public class LinkListActivity extends AppCompatActivity {
         });
 
         updateRecyclerView(false);
+
+        if(firstOpen()) {
+            ShowcaseView view = new ShowcaseView.Builder(this)
+                    .setTarget(new ViewTarget(btnAdd))
+                    .setContentTitle(getResources().getString(R.string.showcase_title_add_link))
+                    .setContentText(getResources().getString(R.string.showcase_text_add_link))
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .withMaterialShowcase()
+                    .build();
+            view.setButtonText(getResources().getString(R.string.showcase_close));
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+
+            int margin = ((Number) (getResources().getDisplayMetrics().density * 16)).intValue();
+            layoutParams.setMargins(margin, margin, margin, margin);
+            view.setButtonPosition(layoutParams);
+        }
     }
 
     @Override
@@ -336,6 +362,23 @@ public class LinkListActivity extends AppCompatActivity {
         // restart to update listview
         finish();
         startActivity(getIntent());
+    }
+
+    /***
+     * If this it's the first time the app gets opened.
+     * @return
+     */
+    private boolean firstOpen() {
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        boolean firstOpen = sharedPreferences.getBoolean("firstOpen", true);
+        if (firstOpen) {
+            // first time
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("firstOpen", false);
+            editor.commit();
+            return true;
+        }
+        return false;
     }
 
 }

@@ -59,4 +59,26 @@
         android:paddingStart="10dp"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="ShowcaseView:"
+        android:id="@+id/info_tv_showcaseview_title"
+        android:layout_below="@+id/info_tv_photoview_link"
+        android:layout_alignParentStart="true"
+        android:paddingStart="10dp"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="https://github.com/amlcurran/ShowcaseView"
+        android:autoLink="web"
+        android:id="@+id/info_tv_showcaseview_link"
+        android:layout_below="@+id/info_tv_showcaseview_title"
+        android:paddingStart="10dp"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>
