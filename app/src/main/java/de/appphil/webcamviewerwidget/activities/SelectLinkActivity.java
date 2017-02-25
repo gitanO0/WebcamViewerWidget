@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.link.Link;
@@ -21,6 +23,7 @@ import de.appphil.webcamviewerwidget.link.RVOnItemClickListener;
 public class SelectLinkActivity extends AppCompatActivity {
 
     private static final String TAG = SelectLinkActivity.class.getSimpleName();
+    public static final String CANCELED_CAUSE_LINKLIST_EMPTY = "linklist_empty";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +44,15 @@ public class SelectLinkActivity extends AppCompatActivity {
         rv.setLayoutManager(layoutManager);
 
         LinkDbManager linkDbManager = new LinkDbManager(this);
+
+        ArrayList<Link> links = linkDbManager.getAllLinks();
+        if(links.isEmpty()) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("result", CANCELED_CAUSE_LINKLIST_EMPTY);
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
+        }
+
 
         LinkListAdapter adapter = new LinkListAdapter(this, linkDbManager.getAllLinks(), new RVOnItemClickListener() {
             @Override

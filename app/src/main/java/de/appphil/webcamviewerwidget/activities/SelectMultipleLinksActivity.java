@@ -12,14 +12,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
+import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.utils.CheckableListAdapter;
 
 
 public class SelectMultipleLinksActivity extends AppCompatActivity {
 
     private static final String TAG = SelectMultipleLinksActivity.class.getSimpleName();
+    public static final String CANCELED_CAUSE_LINKLIST_EMPTY = "linklist_empty";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +44,14 @@ public class SelectMultipleLinksActivity extends AppCompatActivity {
         rv.setLayoutManager(layoutManager);
 
         LinkDbManager linkDbManager = new LinkDbManager(this);
+
+        ArrayList<Link> links = linkDbManager.getAllLinks();
+        if(links.isEmpty()) {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("result", CANCELED_CAUSE_LINKLIST_EMPTY);
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
+        }
 
         final CheckableListAdapter adapter = new CheckableListAdapter(linkDbManager.getAllLinks());
         rv.setAdapter(adapter);

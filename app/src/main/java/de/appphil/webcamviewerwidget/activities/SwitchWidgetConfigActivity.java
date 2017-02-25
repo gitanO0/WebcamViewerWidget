@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -106,6 +107,12 @@ public class SwitchWidgetConfigActivity extends AppCompatActivity {
             }
 
             updateRecyclerView(false);
+        } else if(resultCode == RESULT_CANCELED) {
+            String error = data.getExtras().getString("result");
+            if(error.equals(SelectLinkActivity.CANCELED_CAUSE_LINKLIST_EMPTY)) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.linklist_is_empty), Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
     }
 

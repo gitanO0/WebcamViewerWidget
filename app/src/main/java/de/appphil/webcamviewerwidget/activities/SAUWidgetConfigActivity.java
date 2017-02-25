@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import de.appphil.webcamviewerwidget.R;
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
@@ -60,6 +61,13 @@ public class SAUWidgetConfigActivity extends AppCompatActivity {
             resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             setResult(RESULT_OK, resultValue);
             finish();
+        } else if(resultCode == RESULT_CANCELED) {
+            String error = data.getExtras().getString("result");
+            if(error.equals(SelectLinkActivity.CANCELED_CAUSE_LINKLIST_EMPTY)) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.linklist_is_empty), Toast.LENGTH_LONG).show();
+                setResult(RESULT_CANCELED);
+                finish();
+            }
         }
     }
 }

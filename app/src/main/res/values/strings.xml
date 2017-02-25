@@ -45,4 +45,5 @@
     <string name="save_image_dialog_message">Do you want to save this image?</string>
     <string name="save_image_dialog_title">Save image?</string>
     <string name="image_saved">Image saved!</string>
+    <string name="linklist_is_empty">You haven\'t added a link yet. Go to the main app to add one!</string>
 </resources>
