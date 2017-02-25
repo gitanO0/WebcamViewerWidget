@@ -62,6 +62,7 @@ public class SAUWidgetConfigActivity extends AppCompatActivity {
             setResult(RESULT_OK, resultValue);
             finish();
         } else if(resultCode == RESULT_CANCELED) {
+            if(data == null) return;
             String error = data.getExtras().getString("result");
             if(error.equals(SelectLinkActivity.CANCELED_CAUSE_LINKLIST_EMPTY)) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.linklist_is_empty), Toast.LENGTH_LONG).show();
