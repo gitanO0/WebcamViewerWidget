@@ -340,6 +340,10 @@ public class LinkListActivity extends AppCompatActivity {
                 String name = etName.getText().toString();
                 String link = etLink.getText().toString();
 
+                if(name.isEmpty() || link.isEmpty()) {
+                    return;
+                }
+
                 Log.d(TAG, "User input: " + name + " " + link);
 
                 // add new Link objects to link database table
