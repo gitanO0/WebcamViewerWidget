@@ -64,6 +64,10 @@ public class WidgetUpdateService extends IntentService {
 
         Log.d(TAG, "Current Link is: " + currentLinkLink);
 
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
+        updateWidgetInfoText(currentLink.getName() + ":", id);
+
         // download image from link and save it to internal storage
         Picasso picasso = Picasso.with(getApplicationContext());
         picasso.setLoggingEnabled(true);
@@ -97,16 +101,8 @@ public class WidgetUpdateService extends IntentService {
             e.printStackTrace();
         }
 
-        if(info == null) {
-            info = currentLink.getName() + ":";
-        }
-
         // progress bar is not needed anymore
         hideProgressBar(id);
-
-        // update widget
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
-        RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_switch);
 
         int bytes = bitmap.getByteCount();
         WindowManager windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
@@ -122,7 +118,6 @@ public class WidgetUpdateService extends IntentService {
         }
 
         remoteViews.setImageViewBitmap(R.id.widget_wv_iv, bitmap);
-        remoteViews.setTextViewText(R.id.widget_wv_tv_info, info);
 
         /*
         Reload Button
