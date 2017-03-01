@@ -180,7 +180,11 @@ public class LinkListActivity extends AppCompatActivity {
             LinkListAdapter adapter = new LinkListAdapter(this, linklist, new RVOnItemClickListener() {
                 @Override
                 public void onItemClick(Link link) {
-                    // nothing at the moment
+                    Log.d(TAG, "User clicked on link with id: " + link.getId() + " and name: " + link.getName());
+                    Intent intent = new Intent(getApplicationContext(), LinkListViewImageActivity.class);
+                    intent.putExtra(LinkListViewImageActivity.EXTRA_LINK_NAME, link.getName());
+                    intent.putExtra(LinkListViewImageActivity.EXTRA_LINK_LINK, link.getLink());
+                    startActivity(intent);
                 }
             });
             rv.setAdapter(adapter);

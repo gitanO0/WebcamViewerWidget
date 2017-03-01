@@ -9,7 +9,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import de.appphil.webcamviewerwidget.R;
-import de.appphil.webcamviewerwidget.activities.ViewImageActivity;
+import de.appphil.webcamviewerwidget.activities.WidgetViewImageActivity;
 import de.appphil.webcamviewerwidget.utils.Vars;
 
 
@@ -35,8 +35,8 @@ public class SingleAutoUpdateWidgetProvider extends AppWidgetProvider {
             intent.putExtra("id", appWidgetId);
             context.startService(intent);
 
-            Intent intentViewImage = new Intent(context, ViewImageActivity.class);
-            intentViewImage.putExtra(ViewImageActivity.EXTRA_IMAGE_PATH, appWidgetId + "/" + Vars.SAU_IMAGE_FILENAME);
+            Intent intentViewImage = new Intent(context, WidgetViewImageActivity.class);
+            intentViewImage.putExtra(WidgetViewImageActivity.EXTRA_IMAGE_PATH, appWidgetId + "/" + Vars.SAU_IMAGE_FILENAME);
             PendingIntent piViewImage = PendingIntent.getActivity(context, appWidgetId, intentViewImage, PendingIntent.FLAG_CANCEL_CURRENT);
             views.setOnClickPendingIntent(R.id.widget_sau_rl, piViewImage);
 

@@ -28,7 +28,7 @@ import java.io.OutputStream;
 import de.appphil.webcamviewerwidget.R;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ViewImageActivity extends Activity {
+public class WidgetViewImageActivity extends Activity {
 
     public static final String EXTRA_IMAGE_PATH = "imagePath";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 3542;
@@ -41,7 +41,7 @@ public class ViewImageActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_viewimage);
+        setContentView(R.layout.activity_widgetviewimage);
 
         iv = (ImageView) findViewById(R.id.viewimage_iv);
 

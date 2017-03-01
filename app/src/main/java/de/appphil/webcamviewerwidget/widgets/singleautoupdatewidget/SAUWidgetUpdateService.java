@@ -19,7 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.appphil.webcamviewerwidget.R;
-import de.appphil.webcamviewerwidget.activities.ViewImageActivity;
+import de.appphil.webcamviewerwidget.activities.WidgetViewImageActivity;
 import de.appphil.webcamviewerwidget.db.LinkDbManager;
 import de.appphil.webcamviewerwidget.link.Link;
 import de.appphil.webcamviewerwidget.utils.Vars;
@@ -101,8 +101,8 @@ public class SAUWidgetUpdateService extends IntentService {
         RemoteViews remoteViews = new RemoteViews(getApplication().getPackageName(), R.layout.widget_singleautoupdate);
         remoteViews.setImageViewBitmap(R.id.widget_sau_iv, bitmap);
 
-        Intent intentViewImage = new Intent(getApplicationContext(), ViewImageActivity.class);
-        intentViewImage.putExtra(ViewImageActivity.EXTRA_IMAGE_PATH, id + "/" + Vars.SAU_IMAGE_FILENAME);
+        Intent intentViewImage = new Intent(getApplicationContext(), WidgetViewImageActivity.class);
+        intentViewImage.putExtra(WidgetViewImageActivity.EXTRA_IMAGE_PATH, id + "/" + Vars.SAU_IMAGE_FILENAME);
         PendingIntent piViewImage = PendingIntent.getActivity(getApplicationContext(), id, intentViewImage, PendingIntent.FLAG_CANCEL_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.widget_sau_rl, piViewImage);
 
